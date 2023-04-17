@@ -2,6 +2,18 @@
 
 **Based on Svelte:** the GUI is a SvelteKit app that’s used as a Vite middleware. It also supports projects built in Svelte which is useful for working with SVGs.
 
-This file structure:
+Example file structure:
 
-It was built quickly
+![Example file structure](assets/example_file_structure.png)
+
+This results in a UI like this: https://vimeo.com/818521419
+
+---
+
+This is an early POC written for the Svelte Hackathon. It supports:
+
+- Static projects with Canvas, Svelte, P5.js and Three.js
+- Basic inputs using Tweakpane
+- An experimental transformer that converts P5 scripts to instance-mode modules
+
+Only tested on Mac OSX.
