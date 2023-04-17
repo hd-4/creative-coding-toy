@@ -1,0 +1,12 @@
+{
+	"useTabs": true,
+	"trailingComma": "none",
+	"overrides": [
+		{
+			"files": ["*.svelte"],
+			"options": {
+				"bracketSameLine": false
+			}
+		}
+	]
+}

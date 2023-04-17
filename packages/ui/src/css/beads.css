@@ -1,0 +1,11 @@
+.beads {
+	--beads-spacing: var(--size-m);
+
+	display: flex;
+	align-items: center;
+	gap: var(--beads-spacing);
+}
+
+.beads[data-beads-size='2xs'] {
+	--beads-spacing: var(--size-2xs);
+}

@@ -1,0 +1,6 @@
+.inset-squish {
+	--inset-squish-spacing-block: var(--size-m);
+	--inset-squish-spacing-inline: var(--size-s);
+
+	padding: var(--inset-squish-spacing-block) var(--inset-squish-spacing-inline);
+}

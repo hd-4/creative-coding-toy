@@ -1,0 +1,18 @@
+{
+	"name": "sandbox",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"vite": "^4.2.1",
+		"creative-coding-toy": "workspace:^",
+		"p5": "1.6.0",
+		"three": "0.151.3",
+		"svelte": "3.58.0"
+	}
+}

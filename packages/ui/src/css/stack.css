@@ -1,0 +1,31 @@
+.stack {
+	--stack-spacing: var(--size-m);
+
+	display: flex;
+	flex-direction: column;
+	gap: var(--stack-spacing);
+}
+
+.stack[data-stack-size='2xs'] {
+	--stack-spacing: var(--size-2xs);
+}
+
+.stack[data-stack-size='xs'] {
+	--stack-spacing: var(--size-xs);
+}
+
+.stack[data-stack-size='s'] {
+	--stack-spacing: var(--size-s);
+}
+
+.stack[data-stack-size='lg'] {
+	--stack-spacing: var(--size-l);
+}
+
+.stack:only-child {
+	height: 100%;
+}
+
+.stack > [data-stack-break] {
+	margin-top: auto;
+}

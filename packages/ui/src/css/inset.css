@@ -1,0 +1,9 @@
+.inset {
+	--inset-size: var(--size-m);
+
+	padding: var(--inset-size);
+}
+
+.inset[data-inset-size='xs'] {
+	--inset-size: var(--size-xs);
+}

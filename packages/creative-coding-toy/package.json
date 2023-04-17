@@ -1,0 +1,51 @@
+{
+	"name": "creative-coding-toy",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"check": "tsc",
+		"test": "uvu src \"(spec\\.js|test[\\\\/]index\\.js)\""
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@rollup/pluginutils": "^5.0.2",
+		"@sveltejs/vite-plugin-svelte": "^2.0.4",
+		"@types/connect": "^3.4.35",
+		"@types/node": "^18.15.10",
+		"@types/three": "^0.150.1",
+		"estree-walker": "^3.0.3",
+		"magic-string": "^0.30.0",
+		"ui": "workspace:^",
+		"uvu": "^0.5.6",
+		"vite": "^4.2.1",
+		"svelte": "^3.58.0",
+		"three": "^0.151.3",
+		"typescript": "^5.0.4"
+	},
+	"peerDependencies": {
+		"p5": "^1.6.0",
+		"three": "^0.151.3"
+	},
+	"peerDependenciesMeta": {
+		"p5": {
+			"optional": true
+		},
+		"three": {
+			"optional": true
+		}
+	},
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"types": "./types/index.d.ts"
+		},
+		"./vite": {
+			"import": "./src/exports/vite/index.js"
+		}
+	},
+	"types": "types/index.d.ts",
+	"engines": {
+		"node": ">=18"
+	}
+}

@@ -1,0 +1,11 @@
+.region {
+	--region-spacing-block: var(--size-m);
+	--region-spacing-inline: var(--size-m);
+
+	padding: var(--region-spacing-block) var(--region-spacing-inline);
+}
+
+.region > * {
+	max-width: var(--viewport-max);
+	margin: 0 auto;
+}

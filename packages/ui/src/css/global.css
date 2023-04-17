@@ -1,0 +1,41 @@
+@import 'open-props/style';
+
+:where(html) {
+	--viewport-min: 320px;
+	--viewport-max: 1440px;
+
+	/* Fluid font sizes
+	https://utopia.fyi/type/calculator?c=320,16,1.333,1440,18,1.333,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+	--font-size--2: clamp(0.56rem, calc(0.54rem + 0.1vw), 0.63rem);
+	--font-size--1: clamp(0.75rem, calc(0.72rem + 0.13vw), 0.84rem);
+	--font-size-0: clamp(1rem, calc(0.96rem + 0.18vw), 1.13rem);
+	--font-size-1: clamp(1.33rem, calc(1.29rem + 0.24vw), 1.5rem);
+	--font-size-2: clamp(1.78rem, calc(1.71rem + 0.32vw), 2rem);
+	--font-size-3: clamp(2.37rem, calc(2.28rem + 0.42vw), 2.66rem);
+	--font-size-4: clamp(3.16rem, calc(3.04rem + 0.56vw), 3.55rem);
+	--font-size-5: clamp(4.21rem, calc(4.06rem + 0.75vw), 4.74rem);
+
+	/* Fluid all-purpose sizes
+	https://utopia.fyi/space/calculator?c=320,16,1.333,1440,18,1.333,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+
+	--size-3xs: clamp(0.25rem, calc(0.23rem + 0.09vw), 0.31rem);
+	--size-2xs: clamp(0.5rem, calc(0.48rem + 0.09vw), 0.56rem);
+	--size-xs: clamp(0.75rem, calc(0.71rem + 0.18vw), 0.88rem);
+	--size-s: clamp(1rem, calc(0.96rem + 0.18vw), 1.13rem);
+	--size-m: clamp(1.5rem, calc(1.45rem + 0.27vw), 1.69rem);
+	--size-l: clamp(2rem, calc(1.93rem + 0.36vw), 2.25rem);
+	--size-xl: clamp(3rem, calc(2.89rem + 0.54vw), 3.38rem);
+	--size-2xl: clamp(4rem, calc(3.86rem + 0.71vw), 4.5rem);
+	--size-3xl: clamp(6rem, calc(5.79rem + 1.07vw), 6.75rem);
+
+	--size-3xs-2xs: clamp(0.25rem, calc(0.16rem + 0.45vw), 0.56rem);
+	--size-2xs-xs: clamp(0.5rem, calc(0.39rem + 0.54vw), 0.88rem);
+	--size-xs-s: clamp(0.75rem, calc(0.64rem + 0.54vw), 1.13rem);
+	--size-s-m: clamp(1rem, calc(0.8rem + 0.98vw), 1.69rem);
+	--size-m-l: clamp(1.5rem, calc(1.29rem + 1.07vw), 2.25rem);
+	--size-l-xl: clamp(2rem, calc(1.61rem + 1.96vw), 3.38rem);
+	--size-xl-2xl: clamp(3rem, calc(2.57rem + 2.14vw), 4.5rem);
+	--size-2xl-3xl: clamp(4rem, calc(3.21rem + 3.93vw), 6.75rem);
+
+	--size-s-l: clamp(1rem, calc(0.64rem + 1.79vw), 2.25rem);
+}

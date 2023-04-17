@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"noEmit": true,
+		"strict": true,
+		"target": "es2020",
+		"module": "es2022",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"paths": {
+			"creative-coding-toy": ["./types/index"],
+			"ui": ["../ui/types/index"],
+			"types": ["./types/internal"]
+		}
+	},
+	"include": ["src/**/*"]
+}
