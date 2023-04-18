@@ -54,6 +54,9 @@ export function p5_transform() {
 					`\t${local_sketch_parameter}.${declaration} = ${declaration};\n`
 				);
 			}
+			magic_string.append(
+				`\t${sketch_parameter} = ${local_sketch_parameter};\n`
+			);
 			magic_string.append("};\n");
 
 			// Export declarations
