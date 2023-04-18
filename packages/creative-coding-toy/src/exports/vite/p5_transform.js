@@ -5,8 +5,7 @@ import { window_names } from "./window_names.js";
 
 /**
  * Returns a Vite plugin that transforms global-mode P5 scripts into modules
- * that export an instance-mode function. It also allows for a simple import
- * mechanism using comments.
+ * that export an instance-mode function.
  *
  * @return {import("vite").Plugin}
  */
@@ -15,18 +14,13 @@ export function p5_transform() {
 		name: "cctoy-transform-p5",
 
 		async transform(code, id) {
+			// Filter modules
 			if (!id.endsWith("+project.js")) return null;
-
-			/** @type {import('./types').AstNode} */
+			if (!code.trim()) return null;
 			const ast = this.parse(code);
 			if (is_module(ast)) return null;
 
 			// Analyze the file
-
-			const non_empty_lines = Array.from(code.matchAll(/^.*\S/gm)).map(
-				(match) => /** @type {number} */ (match.index)
-			);
-
 			const {
 				all_declarations,
 				top_level_declarations,
@@ -34,31 +28,47 @@ export function p5_transform() {
 				comment_prelude
 			} = analysis(code, ast);
 
+			// Define the sketch parameter
+			const magic_string = new MagicString(code);
 			const sketch_parameter = deduped_variable_name(
 				"sketch",
 				all_declarations
 			);
-
-			// Wrap the body of the script in a function
-			const magic_string = new MagicString(code);
+			all_declarations.add(sketch_parameter);
 			magic_string.prependRight(
 				comment_prelude.length,
-				`export default function (${sketch_parameter}) {\n`
+				`let ${sketch_parameter};\n\n`
 			);
-			for (let index of non_empty_lines) {
-				if (index >= comment_prelude.length)
-					magic_string.appendRight(index, "\t");
-			}
+
+			// Define the default export
+			const local_sketch_parameter = deduped_variable_name(
+				"sketch",
+				all_declarations
+			);
 			magic_string.trimEnd().append("\n\n");
+			magic_string.append(
+				`export default function (${local_sketch_parameter}) {\n`
+			);
 			for (let declaration of top_level_declarations) {
 				magic_string.append(
-					`\t${sketch_parameter}.${declaration} = ${declaration}\n`
+					`\t${local_sketch_parameter}.${declaration} = ${declaration};\n`
 				);
 			}
-			magic_string.append("}\n");
+			magic_string.append("};\n");
 
-			// Test global references to determine if they should be scoped to the
-			// P5 instance
+			// Export declarations
+			magic_string.append("\n");
+			magic_string.append("export {\n");
+			for (let [i, declaration] of Array.from(
+				top_level_declarations
+			).entries()) {
+				magic_string.append(`\t${declaration}`);
+				if (i < top_level_declarations.size - 1) magic_string.append(",");
+				magic_string.append("\n");
+			}
+			magic_string.append("};\n");
+
+			// Scope global references to the P5 instance
 			let references_p5 = false;
 			for (let reference of global_references) {
 				if (window_names.has(reference.name)) continue;
@@ -77,7 +87,7 @@ export function p5_transform() {
 			}
 
 			// Add a P5 import if there are references to `p5`
-			if (references_p5) magic_string.prepend(`import p5 from 'p5'\n\n`);
+			if (references_p5) magic_string.prepend(`import p5 from 'p5';\n\n`);
 
 			return {
 				code: magic_string.toString(),
@@ -203,7 +213,7 @@ function deduped_variable_name(desired, declarations) {
 	return `${desired}$${index}`;
 }
 
-export const module_declarations = new Set([
+const module_declarations = new Set([
 	"ImportDeclaration",
 	"ExportNamedDeclaration",
 	"ExportDefaultDeclaration",
@@ -216,7 +226,7 @@ export const module_declarations = new Set([
  *
  * @param {import("./types").AstNode} ast
  */
-export function is_module(ast) {
+function is_module(ast) {
 	for (let node of ast.body) {
 		if (module_declarations.has(node.type)) return true;
 	}
