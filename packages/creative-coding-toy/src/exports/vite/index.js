@@ -40,7 +40,7 @@ function main() {
 				},
 				build: {
 					rollupOptions: {
-						input: `${runtime_directory}/start.js`
+						input: `${runtime_directory}/client.js`
 					}
 				}
 			};
@@ -55,7 +55,7 @@ function main() {
 			function update_manifest() {
 				const { collections, projects } = generate_manifest(project_base);
 				manifest = {
-					start_url: `${runtime_base}/start.js`,
+					start_url: `${runtime_base}/client.js`,
 					projects: projects.map((p) => ({
 						id: p.id,
 						name: p.name,
@@ -86,8 +86,6 @@ function main() {
 				server.ws.send({ type: "full-reload" });
 			}
 
-			update_manifest();
-
 			/**
 			 * @param {string} event
 			 * @param {(file: string) => void} callback
@@ -114,6 +112,8 @@ function main() {
 
 			watch("add", () => debounce(update_manifest));
 			watch("unlink", () => debounce(update_manifest));
+
+			update_manifest();
 
 			return () => {
 				server.middlewares.use((req, _res, next) => {
