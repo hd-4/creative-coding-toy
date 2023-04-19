@@ -6,8 +6,8 @@
 	export let data;
 
 	onMount(async () => {
-		const start = await import(/* @vite-ignore */ data.runtime_import_path);
-		start.start();
+		const client = await import(/* @vite-ignore */ data.runtime_import_path);
+		client.start();
 	});
 </script>
 

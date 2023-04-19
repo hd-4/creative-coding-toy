@@ -1,6 +1,8 @@
+import { error } from '@sveltejs/kit';
+
 /** @type {import("./$types").PageServerLoad} */
 export function load({ platform }) {
-	if (!platform) return { on_deck: [], aside: [] };
+	if (!platform) throw error(503);
 
 	const { projects, collections } = platform.req.cctoy_meta.manifest;
 
@@ -34,5 +36,9 @@ export function load({ platform }) {
 		}
 	}
 
-	return { on_deck, aside };
+	return {
+		on_deck,
+		aside,
+		runtime_import_path: platform.req.cctoy_meta.manifest.start_url
+	};
 }

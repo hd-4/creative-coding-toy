@@ -1,12 +1,27 @@
 <script>
+	import { afterNavigate, invalidateAll } from '$app/navigation';
+	import { getContext, onDestroy, onMount } from 'svelte';
 	import ActiveProject from './ActiveProject.svelte';
 
 	/** @type {import("./$types").PageServerData}*/
 	export let data;
 
+	let manifest_listener;
+
 	$: ({ on_deck, aside } = data);
 
 	$: grid_count = on_deck.length >= 4 ? 'many' : on_deck.length;
+
+	onMount(async () => {
+		const client = await import(/* @vite-ignore */ data.runtime_import_path);
+		manifest_listener = client.add_manifest_listener(() => {
+			invalidateAll();
+		});
+	});
+
+	onDestroy(() => {
+		if (manifest_listener) manifest_listener.remove();
+	});
 </script>
 
 <svelte:head>

@@ -83,7 +83,7 @@ function main() {
 						projects: c.projects
 					}))
 				};
-				server.ws.send({ type: "full-reload" });
+				server.ws.send({ type: "custom", event: "manifest-updated" });
 			}
 
 			/**

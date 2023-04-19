@@ -2,6 +2,10 @@ export function start() {
 	// Stub for running in dev
 }
 
+export function add_manifest_listener() {
+	// Stub for running in dev
+}
+
 export async function get_engine() {
 	return {
 		name: 'test',

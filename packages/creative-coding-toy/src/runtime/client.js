@@ -1,9 +1,26 @@
 export function start() {
-	// TODO: does this function even need to exist
-
-	// Vite looks for this if statement to initialize its client connection.
 	if (import.meta.hot) {
+		import.meta.hot.on("manifest-updated", () => {
+			for (let listener of manifest_listeners) {
+				listener();
+			}
+		});
 	}
+}
+
+/** @type {Set<() => void>} */
+const manifest_listeners = new Set();
+
+/**
+ * @param {() => void} callback
+ */
+export function add_manifest_listener(callback) {
+	manifest_listeners.add(callback);
+	return {
+		remove() {
+			manifest_listeners.delete(callback);
+		}
+	};
 }
 
 /**
