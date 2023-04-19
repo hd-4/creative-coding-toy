@@ -30,14 +30,11 @@ export function p5_transform() {
 
 			// Define the sketch parameter
 			const magic_string = new MagicString(code);
-			const sketch_parameter = deduped_variable_name(
-				"sketch",
-				all_declarations
-			);
-			all_declarations.add(sketch_parameter);
+			const sketch_variable = deduped_variable_name("sketch", all_declarations);
+			all_declarations.add(sketch_variable);
 			magic_string.prependRight(
 				comment_prelude.length,
-				`let ${sketch_parameter};\n\n`
+				`let ${sketch_variable};\n\n`
 			);
 
 			// Define the default export
@@ -55,7 +52,7 @@ export function p5_transform() {
 				);
 			}
 			magic_string.append(
-				`\t${sketch_parameter} = ${local_sketch_parameter};\n`
+				`\t${sketch_variable} = ${local_sketch_parameter};\n`
 			);
 			magic_string.append("};\n");
 
@@ -82,10 +79,10 @@ export function p5_transform() {
 				if (reference.type === "Property" && reference.shorthand) {
 					magic_string.appendLeft(
 						reference.start,
-						`${reference.key.name}: ${sketch_parameter}.`
+						`${reference.key.name}: ${sketch_variable}.`
 					);
 				} else {
-					magic_string.appendLeft(reference.start, `${sketch_parameter}.`);
+					magic_string.appendLeft(reference.start, `${sketch_variable}.`);
 				}
 			}
 

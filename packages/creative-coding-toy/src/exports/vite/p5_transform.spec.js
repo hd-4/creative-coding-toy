@@ -9,11 +9,19 @@ import { p5_transform } from "./p5_transform.js";
 const cwd = fileURLToPath(new URL(".", import.meta.url));
 
 test("fixture: basic", async () => {
-	await test_transform("basic", "+project.js", "expected.js");
+	await test_transform("p5-basic", "+project.js", "expected.js");
+});
+
+test("fixture: deduped-names", async () => {
+	await test_transform("p5-deduped-names", "+project.js", "expected.js");
+});
+
+test("fixture: module-access", async () => {
+	await test_transform("p5-module-access", "+project.js", "expected.js");
 });
 
 test("fixture: empty", async () => {
-	await test_transform("empty", "+project.js", "expected.js");
+	await test_transform("p5-empty", "+project.js", "expected.js");
 });
 
 test.run();
@@ -30,7 +38,7 @@ async function test_transform(fixture, input_file, output_file) {
 		root: directory,
 		resolve: {
 			alias: {
-				p5: "p5" // stops Vite from trying to resolve it
+				p5: "/p5.js"
 			}
 		},
 		plugins: [p5_transform()]
