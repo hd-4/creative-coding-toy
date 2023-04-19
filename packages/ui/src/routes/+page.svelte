@@ -1,11 +1,13 @@
 <script>
-	import { afterNavigate, invalidateAll } from '$app/navigation';
-	import { getContext, onDestroy, onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
+	import { onDestroy, onMount } from 'svelte';
 	import ActiveProject from './ActiveProject.svelte';
 
 	/** @type {import("./$types").PageServerData}*/
 	export let data;
 
+	// TODO: types
+	/** @type {any} */
 	let manifest_listener;
 
 	$: ({ on_deck, aside } = data);
