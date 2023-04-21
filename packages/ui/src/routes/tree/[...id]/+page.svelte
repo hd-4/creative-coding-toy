@@ -4,6 +4,7 @@
 	import { browser } from '$app/environment';
 	import { create_tweakpane } from './tweakpane';
 	import { invalidateAll } from '$app/navigation';
+	import { import_client } from '$lib/import_client.js';
 
 	export let data;
 
@@ -31,8 +32,9 @@
 		}
 	}
 
-	onMount(() => {
-		project_listener = data.client.add_project_listener(data.project_import_path, () => {
+	onMount(async () => {
+		const client = await import_client();
+		project_listener = client.add_project_listener(data.project_import_path, () => {
 			invalidateAll();
 		});
 	});

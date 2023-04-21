@@ -38,7 +38,6 @@ export function load({ platform }) {
 
 	return {
 		on_deck,
-		aside,
-		runtime_import_path: platform.req.cctoy_meta.manifest.start_url
+		aside
 	};
 }

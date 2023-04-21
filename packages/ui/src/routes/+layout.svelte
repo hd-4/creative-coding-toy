@@ -1,12 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import '../css/main.css';
-
-	/** @type {import("./$types").LayoutData}*/
-	export let data;
+	import { import_client } from '$lib/import_client.js';
 
 	onMount(async () => {
-		const client = await import(/* @vite-ignore */ data.runtime_import_path);
+		const client = await import_client();
 		client.start();
 	});
 </script>

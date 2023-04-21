@@ -27,7 +27,6 @@ export async function load({ params, platform }) {
 			filetype: project.filetype
 		},
 
-		project_import_path: project.import_path,
-		runtime_import_path: platform.req.cctoy_meta.manifest.start_url
+		project_import_path: project.import_path
 	};
 }
