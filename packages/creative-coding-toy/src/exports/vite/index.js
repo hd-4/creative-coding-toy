@@ -11,17 +11,14 @@ const cwd = process.cwd();
 
 /** @returns {import("vite").Plugin[]} */
 export function creative_coding_toy() {
-	return [
-		...svelte({
-			hot: false
-		}),
-		p5_transform(),
-		main()
-	];
+	return [...svelte(), p5_transform(), hmr(), main()];
 }
 
 /** @returns {import("vite").Plugin} */
 function main() {
+	/** @type {string} */
+	let project_base;
+
 	return {
 		name: "creative-coding-toy",
 
@@ -46,9 +43,11 @@ function main() {
 			};
 		},
 
-		configureServer(server) {
-			const project_base = path.join(server.config.root, "projects");
+		configResolved(config) {
+			project_base = path.join(config.root, "projects");
+		},
 
+		configureServer(server) {
 			/** @type {import("ui").ServerManifest} */
 			let manifest;
 
@@ -125,6 +124,36 @@ function main() {
 				server.middlewares.use(
 					/** @type {import("vite").Connect.HandleFunction} */ (handler)
 				);
+			};
+		}
+	};
+}
+
+/** @returns {import("vite").Plugin} */
+function hmr() {
+	return {
+		name: "cctoy-hmr",
+
+		async transform(code, id) {
+			// Filter modules
+			if (!id.endsWith("+project.js")) return null;
+
+			const client_import = JSON.stringify(`${runtime_base}/client.js`);
+
+			code = code.trimEnd();
+			code =
+				code +
+				"\n\n" +
+				`import * as $$client from ${client_import};
+if (import.meta.hot) {
+  $$client.register_project_hmr(${JSON.stringify(id)});
+  import.meta.hot.accept((mod) => {
+    $$client.update_project(${JSON.stringify(id)}, mod);
+  });
+}`.replace(/\n+/g, "");
+
+			return {
+				code
 			};
 		}
 	};

@@ -4,6 +4,19 @@ export function start() {
 
 export function add_manifest_listener() {
 	// Stub for running in dev
+	return { remove() {} };
+}
+
+/**
+ * @param {string} path
+ */
+export async function load_project(path) {
+	return await import(/* @vite-ignore */ path);
+}
+
+export function add_project_listener() {
+	// Stub for running in dev
+	return { remove() {} };
 }
 
 export async function get_engine() {

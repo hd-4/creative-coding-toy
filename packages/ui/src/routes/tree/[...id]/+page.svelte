@@ -1,8 +1,9 @@
 <script>
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Project from './Project.svelte';
 	import { browser } from '$app/environment';
 	import { create_tweakpane } from './tweakpane';
+	import { invalidateAll } from '$app/navigation';
 
 	export let data;
 
@@ -12,6 +13,8 @@
 	let tweakpane;
 
 	let project_props = {};
+
+	let project_listener;
 
 	$: update_tweakpane(data.project_module?.inputs);
 	function update_tweakpane(schema) {
@@ -28,10 +31,18 @@
 		}
 	}
 
+	onMount(() => {
+		project_listener = data.client.add_project_listener(data.project_import_path, () => {
+			invalidateAll();
+		});
+	});
+
 	onDestroy(() => {
-		if (!tweakpane) return;
-		tweakpane.destroy();
-		tweakpane = null;
+		if (project_listener) project_listener.remove();
+		if (tweakpane) {
+			tweakpane.destroy();
+			tweakpane = null;
+		}
 	});
 </script>
 
