@@ -1,51 +1,89 @@
 <script>
-	import { onDestroy, onMount } from 'svelte';
-	import Project from './Project.svelte';
-	import { browser } from '$app/environment';
+	import { onDestroy } from 'svelte';
 	import { create_tweakpane } from './tweakpane';
-	import { invalidateAll } from '$app/navigation';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { import_client } from '$lib/import_client.js';
 
 	export let data;
 
-	/**
-	 * @type {{ params: any; update_schema: any; destroy: any; } | null}
-	 */
-	let tweakpane;
+	/** @type {HTMLElement} */
+	let container;
 
-	let project_props = {};
+	/** @type {any} */
+	let project_instance;
 
+	/** @type {any} */
 	let project_listener;
 
-	$: update_tweakpane(data.project_module?.inputs);
-	function update_tweakpane(schema) {
-		if (!browser) return;
-		if (!tweakpane && schema) {
-			tweakpane = create_tweakpane(schema, () => (project_props = tweakpane?.params));
-			project_props = tweakpane.params;
-		} else if (tweakpane && schema) {
-			tweakpane.update_schema(schema);
-			project_props = tweakpane.params;
-		} else if (tweakpane && !schema) {
-			tweakpane.destroy();
-			tweakpane = null;
-		}
-	}
+	/** @type {any} */
+	let tweakpane;
 
-	onMount(async () => {
+	afterNavigate(async () => {
+		// Clean up any existing mountings
+		if (project_instance) project_instance.destroy();
+		if (project_listener) project_listener.remove();
+		if (tweakpane) tweakpane.destroy();
+
+		// Create new props
+		let inputs;
+		const new_schema = data.project_module?.inputs;
+		if (new_schema) {
+			tweakpane = create_tweakpane(new_schema, () => {
+				update_inputs();
+			});
+			inputs = tweakpane.params;
+		}
+
+		// Mount
+		const engine = data.engine.mod;
+		const project_module = data.project_module;
+		project_instance = engine.mount(project_module, container, {
+			inputs
+		});
+
+		// Set up HMR
 		const client = await import_client();
-		project_listener = client.add_project_listener(data.project_import_path, () => {
-			invalidateAll();
+		project_listener = client.add_project_listener(data.project_import_path, async () => {
+			await invalidateAll();
+			await reload_project();
 		});
 	});
 
 	onDestroy(() => {
+		if (project_instance) project_instance.destroy();
 		if (project_listener) project_listener.remove();
-		if (tweakpane) {
+		if (tweakpane) tweakpane.destroy();
+	});
+
+	function update_inputs() {
+		project_instance.update_inputs(tweakpane.params);
+	}
+
+	async function reload_project() {
+		// Update props
+		let inputs;
+		const new_schema = data.project_module?.inputs;
+		if (tweakpane && new_schema) {
+			tweakpane.update_schema(new_schema);
+			inputs = tweakpane.params;
+		} else if (tweakpane && !new_schema) {
 			tweakpane.destroy();
 			tweakpane = null;
+		} else if (!tweakpane) {
+			tweakpane = create_tweakpane(new_schema, () => {
+				update_inputs();
+			});
+			inputs = tweakpane.params;
 		}
-	});
+
+		// Reload the project
+		project_instance.destroy();
+		const engine = data.engine.mod;
+		const project_module = data.project_module;
+		project_instance = engine.mount(project_module, container, {
+			inputs
+		});
+	}
 </script>
 
 <svelte:head>
@@ -56,9 +94,7 @@
 	<div class="_layout">
 		<div class="_title">{data.project_name}</div>
 		<div class="_output">
-			{#if browser && data.engine.mod}
-				<Project mod={data.project_module} engine={data.engine.mod} props={project_props} />
-			{/if}
+			<div bind:this={container} />
 		</div>
 	</div>
 </div>
