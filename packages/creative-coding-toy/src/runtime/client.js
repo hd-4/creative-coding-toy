@@ -1,11 +1,9 @@
-export function start() {
-	if (import.meta.hot) {
-		import.meta.hot.on("manifest-updated", () => {
-			for (let listener of manifest_listeners) {
-				listener();
-			}
-		});
-	}
+if (import.meta.hot) {
+	import.meta.hot.on("manifest-updated", () => {
+		for (let listener of manifest_listeners) {
+			listener();
+		}
+	});
 }
 
 /** @type {Set<() => void>} */
