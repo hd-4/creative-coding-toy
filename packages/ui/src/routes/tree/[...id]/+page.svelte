@@ -1,5 +1,5 @@
 <script>
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { create_tweakpane } from './tweakpane';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { import_client } from '$lib/import_client.js';
@@ -18,10 +18,40 @@
 	/** @type {any} */
 	let tweakpane;
 
+	onMount(async () => {
+		// Create new props
+		let inputs;
+		const new_schema = data.project_module?.inputs;
+		if (new_schema) {
+			tweakpane = create_tweakpane(new_schema, () => {
+				update_inputs();
+			});
+			inputs = tweakpane.params;
+		}
+
+		// Mount
+		const engine = data.engine.mod;
+		const project_module = data.project_module;
+		project_instance = engine.mount(project_module, container, {
+			inputs
+		});
+
+		// Set up HMR
+		const client = await import_client();
+		project_listener = client.add_project_listener(data.project_import_path, async () => {
+			await invalidateAll();
+			await reload_project();
+		});
+	});
+
 	afterNavigate(async () => {
-		// Clean up any existing mountings
-		if (project_instance) project_instance.destroy();
-		if (project_listener) project_listener.remove();
+		// afterNavigate callbacks run on mount (which occurs after the first
+		// navigation) and after subsequent navigations.
+		if (!project_instance) return;
+
+		// Clean up the existing project instance
+		project_instance.destroy();
+		project_listener.remove();
 		if (tweakpane) tweakpane.destroy();
 
 		// Create new props
@@ -98,6 +128,14 @@
 		</div>
 	</div>
 </div>
+
+<!-- {#each data.siblings || [] as sibling}
+	<div><a href={sibling.link}>{sibling.name}</a></div>
+{/each}
+
+{#each data.children || [] as child}
+	<div><a href={child.link}>{child.name}</a></div>
+{/each} -->
 
 <style>
 	._layout {

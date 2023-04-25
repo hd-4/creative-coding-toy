@@ -12,8 +12,9 @@ export function create_tweakpane(schema, callback) {
 
 	/**
 	 * @param {typeof schema} s
+	 * @param {typeof params} previous_params
 	 */
-	function configure(s) {
+	function configure(s, previous_params) {
 		for (const k of Object.keys(s)) {
 			let value;
 			let settings;
@@ -23,7 +24,7 @@ export function create_tweakpane(schema, callback) {
 			} else {
 				value = v;
 			}
-			params[k] = value;
+			params[k] = k in previous_params ? previous_params[k] : value;
 			pane.addInput(params, k, settings);
 		}
 	}
@@ -31,7 +32,7 @@ export function create_tweakpane(schema, callback) {
 	params = {};
 	pane = new Pane();
 	pane.on('change', callback);
-	configure(schema);
+	configure(schema, {});
 
 	return {
 		pane,
@@ -42,10 +43,11 @@ export function create_tweakpane(schema, callback) {
 		 */
 		update_schema(new_schema) {
 			pane.dispose();
+			const old_params = params;
 			params = this.params = {};
 			pane = this.pane = new Pane();
 			pane.on('change', () => callback());
-			configure(new_schema);
+			configure(new_schema, old_params);
 		},
 
 		destroy() {
