@@ -7,11 +7,11 @@ import p5 from "p5";
  */
 export function mount(mod, element, { inputs = {} } = {}) {
 	/**
-	 * @param {any} p
+	 * @param {any} sketch
 	 */
-	function p5_wrapper(p) {
-		p.inputs = inputs;
-		mod.default(p);
+	function p5_wrapper(sketch) {
+		sketch.inputs = inputs;
+		mod.default(sketch);
 	}
 
 	let instance = new p5(p5_wrapper, element);
