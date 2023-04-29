@@ -37,7 +37,7 @@ function main() {
 				},
 				build: {
 					rollupOptions: {
-						input: `${runtime_directory}/client.js`
+						input: `${runtime_directory}/host.js`
 					}
 				}
 			};
@@ -54,7 +54,7 @@ function main() {
 			function update_manifest() {
 				const { collections, projects } = generate_manifest(project_base);
 				manifest = {
-					start_url: `${runtime_base}/client.js`,
+					start_url: `${runtime_base}/host.js`,
 					projects: projects.map((p) => ({
 						id: p.id,
 						name: p.name,
@@ -138,17 +138,17 @@ function hmr() {
 			// Filter modules
 			if (!id.endsWith("+project.js")) return null;
 
-			const client_import = JSON.stringify(`${runtime_base}/client.js`);
+			const host_import = JSON.stringify(`${runtime_base}/host.js`);
 
 			code = code.trimEnd();
 			code =
 				code +
 				"\n\n" +
-				`import * as $$client from ${client_import};
+				`import * as $$host from ${host_import};
 if (import.meta.hot) {
-  $$client.register_project_hmr(${JSON.stringify(id)});
+  $$host.register_project_hmr(${JSON.stringify(id)});
   import.meta.hot.accept((mod) => {
-    $$client.update_project(${JSON.stringify(id)}, mod);
+    $$host.update_project(${JSON.stringify(id)}, mod);
   });
 }`.replace(/\n+/g, "");
 

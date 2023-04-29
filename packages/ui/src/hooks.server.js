@@ -10,7 +10,7 @@ export async function handle({ event, resolve }) {
 	const response = await resolve(event, {
 		transformPageChunk({ html }) {
 			if (!event.platform) return html;
-			return html.replace('%client_url%', event.platform?.req.cctoy_meta.manifest.start_url);
+			return html.replace('%host_url%', event.platform?.req.cctoy_meta.manifest.start_url);
 		}
 	});
 	return response;

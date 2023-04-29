@@ -2,7 +2,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
 	import ActiveProject from './ActiveProject.svelte';
-	import { import_client } from '$lib/import_client.js';
+	import { import_host } from '$lib/import_host.js';
 
 	/** @type {import("./$types").PageServerData}*/
 	export let data;
@@ -16,8 +16,8 @@
 	$: grid_count = on_deck.length >= 4 ? 'many' : on_deck.length;
 
 	onMount(async () => {
-		const client = await import_client();
-		manifest_listener = client.add_manifest_listener(() => {
+		const host = await import_host();
+		manifest_listener = host.add_manifest_listener(() => {
 			invalidateAll();
 		});
 	});

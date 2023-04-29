@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { create_tweakpane } from './tweakpane';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
-	import { import_client } from '$lib/import_client.js';
+	import { import_host } from '$lib/import_host.js';
 
 	export let data;
 
@@ -41,8 +41,8 @@
 		});
 
 		// Set up HMR
-		const client = await import_client();
-		project_listener = client.add_project_listener(data.project_import_path, async () => {
+		const host = await import_host();
+		project_listener = host.add_project_listener(data.project_import_path, async () => {
 			await invalidateAll();
 			await reload_project();
 		});
@@ -79,8 +79,8 @@
 		});
 
 		// Set up HMR
-		const client = await import_client();
-		project_listener = client.add_project_listener(data.project_import_path, async () => {
+		const host = await import_host();
+		project_listener = host.add_project_listener(data.project_import_path, async () => {
 			await invalidateAll();
 			await reload_project();
 		});
