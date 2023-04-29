@@ -1,0 +1,4 @@
+.page-column {
+	max-width: var(--viewport-max);
+	margin: 0 auto;
+}

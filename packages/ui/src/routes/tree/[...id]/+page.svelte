@@ -128,10 +128,10 @@
 </svelte:head>
 
 <div class="region">
-	<div class="_layout">
+	<div class="page-column">
 		<div class="_title">{data.project_name}</div>
 		<div class="_output">
-			<div bind:this={container} />
+			<div class="_output__inner" bind:this={container} />
 		</div>
 	</div>
 </div>
@@ -145,22 +145,17 @@
 {/each} -->
 
 <style>
-	._layout {
-		display: grid;
-		grid-template-columns: 1fr max-content 1fr;
-		row-gap: var(--size-s);
-	}
-
-	._layout > * {
-		grid-column: 2;
-	}
-
 	._title {
 		font-weight: var(--font-weight-7);
 		text-align: center;
 	}
 
 	._output {
+		overflow: hidden;
+	}
+
+	._output__inner {
+		margin: 0 auto;
 		box-shadow: var(--shadow-5);
 	}
 </style>

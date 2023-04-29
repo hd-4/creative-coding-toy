@@ -4,8 +4,3 @@
 
 	padding: var(--region-spacing-block) var(--region-spacing-inline);
 }
-
-.region > * {
-	max-width: var(--viewport-max);
-	margin: 0 auto;
-}
