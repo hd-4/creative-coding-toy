@@ -27,8 +27,8 @@
 		let inputs;
 		const new_schema = data.project_module?.inputs;
 		if (new_schema) {
-			tweakpane = create_tweakpane(new_schema, () => {
-				update_inputs();
+			tweakpane = create_tweakpane(new_schema, (new_inputs) => {
+				update_inputs(new_inputs);
 			});
 			inputs = tweakpane.params;
 		}
@@ -65,8 +65,8 @@
 		let inputs;
 		const new_schema = data.project_module?.inputs;
 		if (new_schema) {
-			tweakpane = create_tweakpane(new_schema, () => {
-				update_inputs();
+			tweakpane = create_tweakpane(new_schema, (new_inputs) => {
+				update_inputs(new_inputs);
 			});
 			inputs = tweakpane.params;
 		}
@@ -92,8 +92,8 @@
 		if (tweakpane) tweakpane.destroy();
 	});
 
-	function update_inputs() {
-		project_instance.update_inputs(tweakpane.params);
+	function update_inputs(new_inputs) {
+		project_instance.update_inputs(new_inputs);
 	}
 
 	async function reload_project() {
@@ -107,8 +107,8 @@
 			tweakpane.destroy();
 			tweakpane = null;
 		} else if (!tweakpane) {
-			tweakpane = create_tweakpane(new_schema, () => {
-				update_inputs();
+			tweakpane = create_tweakpane(new_schema, (new_inputs) => {
+				update_inputs(new_inputs);
 			});
 			inputs = tweakpane.params;
 		}

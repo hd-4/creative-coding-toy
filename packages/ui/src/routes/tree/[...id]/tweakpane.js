@@ -2,7 +2,7 @@ import { Pane } from 'tweakpane';
 
 /**
  * @param {{[x: string]: string | number | {value: string | number;};}} schema
- * @param {() => void} callback
+ * @param {(updates: any) => void} callback
  */
 export function create_tweakpane(schema, callback) {
 	/** @type {Record<string, number | string>} */
@@ -29,9 +29,15 @@ export function create_tweakpane(schema, callback) {
 		}
 	}
 
+	/** @param {import("tweakpane").TpChangeEvent<unknown>} event */
+	function on_change(event) {
+		if (!event.presetKey) return;
+		callback({ [event.presetKey]: event.value });
+	}
+
 	params = {};
 	pane = new Pane();
-	pane.on('change', callback);
+	pane.on('change', on_change);
 	configure(schema, {});
 
 	return {
@@ -46,7 +52,7 @@ export function create_tweakpane(schema, callback) {
 			const old_params = params;
 			params = this.params = {};
 			pane = this.pane = new Pane();
-			pane.on('change', () => callback());
+			pane.on('change', on_change);
 			configure(new_schema, old_params);
 		},
 
