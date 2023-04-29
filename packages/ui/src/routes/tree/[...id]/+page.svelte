@@ -18,7 +18,11 @@
 	/** @type {any} */
 	let tweakpane;
 
+	let in_mount_callback = false;
+
 	onMount(async () => {
+		in_mount_callback = true;
+
 		// Create new props
 		let inputs;
 		const new_schema = data.project_module?.inputs;
@@ -42,12 +46,15 @@
 			await invalidateAll();
 			await reload_project();
 		});
+
+		in_mount_callback = false;
 	});
 
-	afterNavigate(async () => {
-		// afterNavigate callbacks run on mount (which occurs after the first
-		// navigation) and after subsequent navigations.
-		if (!project_instance) return;
+	afterNavigate(async (after_navigate) => {
+		// afterNavigate callbacks run on mount and after subsequent navigations,
+		// but an onMount callback is already going to set up the project for the
+		// first page load.
+		if (in_mount_callback) return;
 
 		// Clean up the existing project instance
 		project_instance.destroy();
