@@ -25,7 +25,7 @@
 
 		// Create new props
 		let inputs;
-		const new_schema = data.project_module?.inputs;
+		const new_schema = data.project_module?.input_config;
 		if (new_schema) {
 			tweakpane = create_tweakpane(new_schema, (new_inputs) => {
 				update_inputs(new_inputs);
@@ -63,7 +63,7 @@
 
 		// Create new props
 		let inputs;
-		const new_schema = data.project_module?.inputs;
+		const new_schema = data.project_module?.input_config;
 		if (new_schema) {
 			tweakpane = create_tweakpane(new_schema, (new_inputs) => {
 				update_inputs(new_inputs);
@@ -99,7 +99,7 @@
 	async function reload_project() {
 		// Update props
 		let inputs;
-		const new_schema = data.project_module?.inputs;
+		const new_schema = data.project_module?.input_config;
 		if (tweakpane && new_schema) {
 			tweakpane.update_schema(new_schema);
 			inputs = tweakpane.params;
