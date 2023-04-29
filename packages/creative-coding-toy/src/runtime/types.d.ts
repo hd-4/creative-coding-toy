@@ -33,3 +33,10 @@ export interface ThreeJSConfig {
 	width: number;
 	height: number;
 }
+
+export interface LiveInputs<T extends object> {
+	proxy: T;
+	start_span(name: string): void;
+	end_span(): void;
+	update(changes: Partial<T>): Set<string>;
+}
