@@ -22,11 +22,11 @@ export function mount(mod, element, options = {}) {
 		sketch.preload = p5_method_wrapper(inputs, "preload", sketch.preload);
 		sketch.setup = p5_method_wrapper(inputs, "setup", sketch.setup);
 		sketch.draw = p5_method_wrapper(inputs, "draw", sketch.draw);
+		sketch.inputs = inputs.proxy;
 		p5_instance = sketch;
 	}
 
 	let sketch_instance = new p5(sketch_wrapper, element);
-	p5_instance.inputs = inputs.proxy;
 
 	return {
 		/**
@@ -37,7 +37,6 @@ export function mount(mod, element, options = {}) {
 			if (affected_spans.has("preload") || affected_spans.has("setup")) {
 				sketch_instance.remove();
 				sketch_instance = new p5(sketch_wrapper, element);
-				p5_instance.inputs = inputs.proxy;
 			} else if (affected_spans.has("draw")) {
 				p5_instance.redraw();
 			}
