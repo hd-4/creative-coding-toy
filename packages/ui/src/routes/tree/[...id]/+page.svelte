@@ -151,11 +151,11 @@
 	}
 
 	._output {
-		overflow: hidden;
+		display: grid;
+		place-items: center;
 	}
 
 	._output__inner {
-		margin: 0 auto;
-		box-shadow: var(--shadow-5);
+		box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 	}
 </style>
