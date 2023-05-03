@@ -102,7 +102,7 @@ export function p5_transform() {
 
 /**
  * @param {string} code
- * @param {import('./types').AstNode} ast
+ * @param {import('./types.js').AstNode} ast
  */
 function analysis(code, ast) {
 	const comment_prelude = code.slice(0, ast.body[0]?.start || 0);
@@ -110,13 +110,13 @@ function analysis(code, ast) {
 	const top_level_declarations = new Set();
 	/** @type {Set<string>} */
 	const all_declarations = new Set();
-	/** @type {Set<import('./types').AstNode>} */
+	/** @type {Set<import('./types.js').AstNode>} */
 	const global_references = new Set();
 
 	let current_scope = attachScopes(ast, "scope");
 
 	/**
-	 * @param {import('./types').AstNode} node
+	 * @param {import('./types.js').AstNode} node
 	 * @param {string} name
 	 */
 	function handle_reference(node, name) {
@@ -133,8 +133,8 @@ function analysis(code, ast) {
 
 	walk(ast, {
 		/**
-		 * @param {import('./types').AstNode} node
-		 * @param {import('./types').AstNode} parent
+		 * @param {import('./types.js').AstNode} node
+		 * @param {import('./types.js').AstNode} parent
 		 */
 		enter(node, parent) {
 			if (node.scope) {
@@ -171,8 +171,8 @@ function analysis(code, ast) {
 }
 
 /**
- * @param {import('./types').AstNode} node
- * @param {import('./types').AstNode} parent
+ * @param {import('./types.js').AstNode} node
+ * @param {import('./types.js').AstNode} parent
  * @return {boolean}
  */
 function is_reference(node, parent) {
@@ -224,7 +224,7 @@ const module_declarations = new Set([
  * Returns whether or not a parsed JavaScript file contains declarations that
  * would cause it to be treated as a module.
  *
- * @param {import("./types").AstNode} ast
+ * @param {import("./types.js").AstNode} ast
  */
 function is_module(ast) {
 	for (let node of ast.body) {

@@ -3,7 +3,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import * as vite from "vite";
 
 import { handler } from "ui";
-import { generate_manifest } from "../../sync/index.js";
+import { generate_manifest } from "../sync/index.js";
 import { runtime_base, runtime_directory } from "./utils.js";
 import { p5_transform } from "./p5_transform.js";
 
