@@ -52,7 +52,7 @@ ts.forEachChild(input_file, (node) => {
 members.sort();
 
 const output_path = fileURLToPath(
-	new URL("../src/vite/window_names.js", import.meta.url)
+	new URL("../src/p5_transform/window_names.js", import.meta.url)
 );
 fs.writeFileSync(
 	output_path,
