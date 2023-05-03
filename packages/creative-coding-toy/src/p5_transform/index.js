@@ -1,4 +1,4 @@
-import { attachScopes } from "@rollup/pluginutils";
+import { attachScopes, createFilter } from "@rollup/pluginutils";
 import { walk } from "estree-walker";
 import MagicString from "magic-string";
 import { window_names } from "./window_names.js";
@@ -7,15 +7,19 @@ import { window_names } from "./window_names.js";
  * Returns a Vite plugin that transforms global-mode P5 scripts into modules
  * that export an instance-mode function.
  *
+ * @param {object} options
+ * @param {import("@rollup/pluginutils").FilterPattern} options.include
  * @return {import("vite").Plugin}
  */
-export function p5_transform() {
+export function p5_transform({ include }) {
+	const filter = createFilter(include);
+
 	return {
 		name: "cctoy-transform-p5",
 
 		async transform(code, id) {
 			// Filter modules
-			if (!id.endsWith("+project.js")) return null;
+			if (!filter(id)) return null;
 			if (!code.trim()) return null;
 			const ast = this.parse(code);
 			if (is_module(ast)) return null;

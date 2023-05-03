@@ -11,7 +11,14 @@ const cwd = process.cwd();
 
 /** @returns {import("vite").Plugin[]} */
 export function creative_coding_toy() {
-	return [...svelte(), p5_transform(), hmr(), main()];
+	return [
+		...svelte(),
+		p5_transform({
+			include: "**/+project.js"
+		}),
+		hmr(),
+		main()
+	];
 }
 
 /** @returns {import("vite").Plugin} */
