@@ -36,12 +36,20 @@ async function test_transform(fixture, input_file, output_file) {
 	const vite = await createServer({
 		configFile: false,
 		root: directory,
-		resolve: {
-			alias: {
-				p5: "/p5.js"
-			}
-		},
-		plugins: [p5_transform()]
+		appType: "custom",
+		plugins: [
+			{
+				name: "provide-p5-import",
+				enforce: "pre",
+				resolveId(source) {
+					if (source === "p5") return "/resolved/path/to/p5.js";
+				},
+				load(id) {
+					if (id === "/resolved/path/to/p5.js") return "export {};";
+				}
+			},
+			p5_transform()
+		]
 	});
 
 	let actual;
