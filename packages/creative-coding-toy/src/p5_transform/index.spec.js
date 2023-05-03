@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 import { createServer } from "vite";
-import { p5_transform } from "./p5_transform.js";
+import { p5_transform } from "./index.js";
 
 const cwd = fileURLToPath(new URL(".", import.meta.url));
 
