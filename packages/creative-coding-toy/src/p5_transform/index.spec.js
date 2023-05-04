@@ -1,72 +1,94 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { test } from "uvu";
+import { suite } from "uvu";
 import * as assert from "uvu/assert";
 import { createServer } from "vite";
 import { p5_transform } from "./index.js";
 
 const cwd = fileURLToPath(new URL(".", import.meta.url));
 
-test("fixture: basic", async () => {
-	await test_transform({
-		fixture: "basic",
-		include: "**/input.js",
-		input_file: "input.js",
-		output_file: "expected.js"
-	});
+/**
+ * @type {import("uvu").Test<{
+ * 	root: string;
+ * 	start_vite(
+ * 		fixture: string,
+ * 		include: import("@rollup/pluginutils").FilterPattern
+ * 	): Promise<void>;
+ * 	test_transform(
+ * 		input_file: string,
+ * 		output_file: string
+ * 	): Promise<void>;
+ * 	vite: import("vite").ViteDevServer;
+ * }>}
+ */
+const test = suite();
+
+test("fixture: basic", async (context) => {
+	await context.start_vite("basic", "**/input.js");
+	await context.test_transform("input.js", "expected.js");
+
+	const id = (await context.vite.pluginContainer.resolveId("/input.js"))?.id;
+	assert.ok(id);
+	const info = context.vite.pluginContainer.getModuleInfo(id);
+	assert.ok(
+		info?.meta?.transformed_from_p5,
+		"meta.transformed_from_p5 is not set"
+	);
 });
 
-test("fixture: deduped-names", async () => {
-	await test_transform({
-		fixture: "deduped-names",
-		include: "**/input.js",
-		input_file: "input.js",
-		output_file: "expected.js"
-	});
+test("fixture: deduped-names", async (context) => {
+	await context.start_vite("deduped-names", "**/input.js");
+	await context.test_transform("input.js", "expected.js");
 });
 
-test("fixture: module-access", async () => {
-	await test_transform({
-		fixture: "module-access",
-		include: "**/input.js",
-		input_file: "input.js",
-		output_file: "expected.js"
-	});
+test("fixture: module-access", async (context) => {
+	await context.start_vite("module-access", "**/input.js");
+	await context.test_transform("input.js", "expected.js");
 });
 
-test("fixture: empty", async () => {
-	await test_transform({
-		fixture: "empty",
-		include: "**/input.js",
-		input_file: "input.js",
-		output_file: "expected.js"
-	});
+test("fixture: empty", async (context) => {
+	await context.start_vite("empty", "**/input.js");
+	await context.test_transform("input.js", "expected.js");
 });
 
-test("fixture: project-filename", async () => {
-	await test_transform({
-		fixture: "project-filename",
-		include: "**/+project.js",
-		input_file: "+project.js",
-		output_file: "expected.js"
-	});
+test("fixture: project-filename", async (context) => {
+	await context.start_vite("project-filename", "**/+project.js");
+	await context.test_transform("+project.js", "expected.js");
+});
+
+test.before.each((context) => {
+	context.start_vite = async (fixture, include) => {
+		context.root = fixture_path(fixture);
+		context.vite = await create_vite(context.root, include);
+	};
+
+	context.test_transform = async (input_file, output_file) => {
+		const result = await context.vite.transformRequest(`/${input_file}`);
+		if (!result) throw new Error("Input module not found!");
+		const actual = result.code;
+		const expected_path = path.join(context.root, output_file);
+		if (process.env.UPDATE_FIXTURES) {
+			writeFileSync(expected_path, actual, "utf8");
+		}
+		assert.fixture(actual, readFileSync(expected_path, "utf8"));
+	};
+});
+
+test.after.each(async (context) => {
+	await context.vite.close();
 });
 
 test.run();
 
 /**
- * @param {object} options
- * @param {string} options.include
- * @param {string} options.fixture
- * @param {string} options.input_file
- * @param {string} options.output_file
+ * @param {string} root
+ * @param {import("@rollup/pluginutils").FilterPattern} include
  */
-async function test_transform({ include, fixture, input_file, output_file }) {
-	const directory = fixture_path(fixture);
-	const vite = await createServer({
+function create_vite(root, include) {
+	return createServer({
 		configFile: false,
-		root: directory,
+		root,
 		appType: "custom",
 		plugins: [
 			{
@@ -82,23 +104,6 @@ async function test_transform({ include, fixture, input_file, output_file }) {
 			p5_transform({ include })
 		]
 	});
-
-	let actual;
-	try {
-		const result = await vite.transformRequest(`/${input_file}`);
-		if (!result) throw new Error("Input module not found!");
-		actual = result.code;
-	} finally {
-		await vite.close();
-	}
-
-	const expected_path = path.join(directory, output_file);
-
-	if (process.env.UPDATE_FIXTURES) {
-		writeFileSync(expected_path, actual, "utf8");
-	}
-
-	assert.fixture(actual, readFileSync(expected_path, "utf8"));
 }
 
 /**
