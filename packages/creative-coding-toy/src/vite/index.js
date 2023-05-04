@@ -8,6 +8,8 @@ import { runtime_base, runtime_directory } from "./utils.js";
 import { p5_transform } from "../p5_transform/index.js";
 
 const cwd = process.cwd();
+const host_filesystem_path = `${runtime_directory}/host.js`;
+const host_browser_path = `${runtime_base}/host.js`;
 
 /** @returns {import("vite").Plugin[]} */
 export function creative_coding_toy() {
@@ -44,7 +46,7 @@ function main() {
 				},
 				build: {
 					rollupOptions: {
-						input: `${runtime_directory}/host.js`
+						input: host_filesystem_path
 					}
 				}
 			};
@@ -61,7 +63,7 @@ function main() {
 			function update_manifest() {
 				const { collections, projects } = generate_manifest(project_base);
 				manifest = {
-					start_url: `${runtime_base}/host.js`,
+					start_url: host_browser_path,
 					projects: projects.map((p) => ({
 						id: p.id,
 						name: p.name,
@@ -145,13 +147,11 @@ function hmr() {
 			// Filter modules
 			if (!id.endsWith("+project.js")) return null;
 
-			const host_import = JSON.stringify(`${runtime_base}/host.js`);
-
 			code = code.trimEnd();
 			code =
 				code +
 				"\n\n" +
-				`import * as $$host from ${host_import};
+				`import * as $$host from ${JSON.stringify(host_browser_path)};
 if (import.meta.hot) {
   $$host.register_project_hmr(${JSON.stringify(id)});
   import.meta.hot.accept((mod) => {
