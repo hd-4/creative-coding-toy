@@ -50,6 +50,14 @@ test("fixture: module-access", async (context) => {
 test("fixture: empty", async (context) => {
 	await context.start_vite("empty", "**/input.js");
 	await context.test_transform("input.js", "expected.js");
+
+	const id = (await context.vite.pluginContainer.resolveId("/input.js"))?.id;
+	assert.ok(id);
+	const info = context.vite.pluginContainer.getModuleInfo(id);
+	assert.not.ok(
+		info?.meta?.transformed_from_p5,
+		"meta.transformed_from_p5 is set"
+	);
 });
 
 test("fixture: project-filename", async (context) => {
