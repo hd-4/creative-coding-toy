@@ -124,15 +124,12 @@ function main() {
 			update_manifest();
 
 			return () => {
-				server.middlewares.use((req, _res, next) => {
-					/** @type {any} */ (req).cctoy_meta = {
-						manifest
-					};
-					next();
+				server.middlewares.use((req, res, next) => {
+					// @ts-ignore
+					req.cctoy_meta = { manifest };
+					// @ts-ignore
+					handler(req, res, next);
 				});
-				server.middlewares.use(
-					/** @type {import("vite").Connect.HandleFunction} */ (handler)
-				);
 			};
 		}
 	};
