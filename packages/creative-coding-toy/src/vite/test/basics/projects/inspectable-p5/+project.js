@@ -15,11 +15,8 @@ function draw() {
 }
 
 function update(values) {
-	window.TEST_OUTPUT = {
-		updated: Date.now(),
-		values: {
-			...(window.TEST_OUTPUT?.values ?? {}),
-			...values
-		}
+	window.test_output = {
+		...(window.test_output ?? {}),
+		...values
 	};
 }

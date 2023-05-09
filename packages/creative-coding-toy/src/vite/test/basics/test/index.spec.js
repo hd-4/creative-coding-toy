@@ -35,7 +35,7 @@ test.describe("P5 project", () => {
 	// 	await expect(page).toHaveTitle(/P 5 project/i);
 	// });
 
-	test.only("renders", async ({ page, output }) => {
+	test("renders", async ({ page, output }) => {
 		await page.goto("/tree/inspectable-p5");
 		const test_output = await output.waitForRendered();
 		expect(test_output.draw_count).toBe(1);
