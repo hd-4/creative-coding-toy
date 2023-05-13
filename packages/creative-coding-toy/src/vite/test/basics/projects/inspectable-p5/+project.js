@@ -1,22 +1,20 @@
 // @ts-nocheck
 
-let draw_count;
+const input_config = {
+	used_in_setup: "foo",
+	used_in_draw: "foo",
+	unused: "foo"
+};
 
 function setup() {
-	noLoop();
+	console.log("[test] p5 lifecycle", "setup");
 
-	draw_count = 0;
-	update({ draw_count });
+	noLoop();
+	const x = inputs.used_in_setup;
 }
 
 function draw() {
-	draw_count++;
-	update({ draw_count });
-}
+	console.log("[test] p5 lifecycle", "draw");
 
-function update(values) {
-	window.test_output = {
-		...(window.test_output ?? {}),
-		...values
-	};
+	const x = inputs.used_in_draw;
 }

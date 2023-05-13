@@ -9,8 +9,8 @@ import {
 export const test: TestType<
 	PlaywrightTestArgs &
 		PlaywrightTestOptions & {
-			output: {
-				waitForRendered(): Promise<Record<string, number | string>>;
+			project: {
+				waitForLifecycleLog(event?: string): Promise<string>;
 			};
 		},
 	PlaywrightWorkerArgs & PlaywrightWorkerOptions

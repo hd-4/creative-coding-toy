@@ -1,32 +1,21 @@
 import { test as base } from "@playwright/test";
 
 export const test = base.extend({
-	output: async ({ page }, use) => {
+	project: async ({ page }, use) => {
 		use({
-			async waitForRendered() {
-				const output_values = await page.waitForFunction(() => {
-					const current = window.test_output;
-					if (!current) return undefined;
-
-					window.test_outputs ||= [];
-					const last_entry = window.test_outputs.at(-1);
-
-					if (last_entry?.value !== current) {
-						window.test_outputs.push({
-							timestamp: Date.now(),
-							value: current
-						});
-						return undefined;
-					}
-
-					if (Date.now() - last_entry.timestamp > 100) {
-						window.test_outputs = undefined;
-						return current;
-					}
-
-					return undefined;
+			/**
+			 * @param {string} [event]
+			 */
+			async waitForLifecycleLog(event) {
+				const msg = await page.waitForEvent("console", async (msg) => {
+					const first = await msg.args()[0].jsonValue();
+					if (!first.startsWith("[test] ") || !first.endsWith("lifecycle"))
+						return false;
+					if (!event) return true;
+					const second = await msg.args()[1].jsonValue();
+					return second === event;
 				});
-				return output_values ? await output_values.jsonValue() : undefined;
+				return await msg.args()[1].jsonValue();
 			}
 		});
 	}
