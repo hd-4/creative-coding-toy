@@ -11,6 +11,7 @@ export const test: TestType<
 		PlaywrightTestOptions & {
 			project: {
 				waitForLifecycleLog(event?: string): Promise<string>;
+				waitForLifecycleLogs(...event: string[]): Promise<string>;
 			};
 		},
 	PlaywrightWorkerArgs & PlaywrightWorkerOptions
