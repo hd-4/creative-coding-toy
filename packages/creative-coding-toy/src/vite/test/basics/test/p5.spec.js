@@ -13,13 +13,13 @@ test.describe("P5 project", () => {
 
 	test("renders", async ({ page, project }) => {
 		const events = project.waitForLifecycleLogs("setup", "draw");
-		await page.goto("/tree/inspectable-p5");
+		await page.goto("/tree/p5-basic");
 		await events;
 	});
 
 	test("remounts on input change used in setup", async ({ page, project }) => {
 		const draw_event = project.waitForLifecycleLog("draw");
-		await page.goto("/tree/inspectable-p5");
+		await page.goto("/tree/p5-basic");
 		await draw_event;
 
 		const next_event = project.waitForLifecycleLog();
@@ -37,7 +37,7 @@ test.describe("P5 project", () => {
 
 	test("redraws on input change used in draw", async ({ page, project }) => {
 		const draw_event = project.waitForLifecycleLog("draw");
-		await page.goto("/tree/inspectable-p5");
+		await page.goto("/tree/p5-basic");
 		await draw_event;
 
 		const next_event = project.waitForLifecycleLog();
@@ -55,7 +55,7 @@ test.describe("P5 project", () => {
 
 	test("doesn't redraw on unused input change", async ({ page, project }) => {
 		const draw_event = project.waitForLifecycleLog("draw");
-		await page.goto("/tree/inspectable-p5");
+		await page.goto("/tree/p5-basic");
 		await draw_event;
 
 		const next_event = project.waitForLifecycleLog();
@@ -73,7 +73,7 @@ test.describe("P5 project", () => {
 		expect(await race).toBeUndefined();
 	});
 
-	test("simple hmr", async ({ page, project }) => {
+	test("hmr", async ({ page, project }) => {
 		const draw_event = project.waitForLifecycleLog("draw");
 		await page.goto("/tree/p5-hmr");
 		await draw_event;
