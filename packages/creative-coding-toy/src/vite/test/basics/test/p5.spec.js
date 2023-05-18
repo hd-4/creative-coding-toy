@@ -12,9 +12,30 @@ test.describe("P5 project", () => {
 	// });
 
 	test("renders", async ({ page, project }) => {
-		const events = project.waitForLifecycleLogs("setup", "draw");
+		const events = project.waitForLifecycleLogs("preload", "setup", "draw");
 		await page.goto("/tree/p5-basic");
 		await events;
+	});
+
+	test("remounts on input change used in preload", async ({
+		page,
+		project
+	}) => {
+		const draw_event = project.waitForLifecycleLog("draw");
+		await page.goto("/tree/p5-basic");
+		await draw_event;
+
+		const next_event = project.waitForLifecycleLog();
+
+		// await page.getByLabel("used_in_setup").fill("bar");
+		const input = page
+			.locator("div")
+			.filter({ hasText: /^used_in_preload$/ })
+			.getByRole("textbox");
+		await input.fill("bar");
+		await input.blur();
+
+		expect(await next_event).toBe("preload");
 	});
 
 	test("remounts on input change used in setup", async ({ page, project }) => {
@@ -32,7 +53,7 @@ test.describe("P5 project", () => {
 		await input.fill("bar");
 		await input.blur();
 
-		expect(await next_event).toBe("setup");
+		expect(await next_event).toBe("preload");
 	});
 
 	test("redraws on input change used in draw", async ({ page, project }) => {
