@@ -52,7 +52,7 @@ export function p5_transform({ include }) {
 			);
 			for (let declaration of top_level_declarations) {
 				magic_string.append(
-					`\t${local_sketch_parameter}.${declaration} = ${declaration};\n`
+					`\t${local_sketch_parameter}.${declaration} ??= ${declaration};\n`
 				);
 			}
 			magic_string.append(

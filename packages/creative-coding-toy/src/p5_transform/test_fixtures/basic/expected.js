@@ -49,11 +49,11 @@ function mouseClicked() {
 }
 
 export default function (sketch$1) {
-	sketch$1.img = img;
-	sketch$1.preload = preload;
-	sketch$1.setup = setup;
-	sketch$1.draw = draw;
-	sketch$1.mouseClicked = mouseClicked;
+	sketch$1.img ??= img;
+	sketch$1.preload ??= preload;
+	sketch$1.setup ??= setup;
+	sketch$1.draw ??= draw;
+	sketch$1.mouseClicked ??= mouseClicked;
 	sketch = sketch$1;
 };
 

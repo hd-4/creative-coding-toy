@@ -5,7 +5,7 @@ function setup() {
 }
 
 export default function (sketch$1) {
-	sketch$1.setup = setup;
+	sketch$1.setup ??= setup;
 	sketch = sketch$1;
 };
 

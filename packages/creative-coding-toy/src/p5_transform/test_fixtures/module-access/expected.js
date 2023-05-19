@@ -9,8 +9,8 @@ function draw() {
 }
 
 export default function (sketch$1) {
-	sketch$1.setup = setup;
-	sketch$1.draw = draw;
+	sketch$1.setup ??= setup;
+	sketch$1.draw ??= draw;
 	sketch = sketch$1;
 };
 

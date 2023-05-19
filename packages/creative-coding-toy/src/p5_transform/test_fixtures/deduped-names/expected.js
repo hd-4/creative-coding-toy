@@ -24,8 +24,8 @@ function draw() {
 }
 
 export default function (sketch$3) {
-	sketch$3.setup = setup;
-	sketch$3.draw = draw;
+	sketch$3.setup ??= setup;
+	sketch$3.draw ??= draw;
 	sketch$2 = sketch$3;
 };
 
