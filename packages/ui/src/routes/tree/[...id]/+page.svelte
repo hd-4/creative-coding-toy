@@ -106,7 +106,7 @@
 		} else if (tweakpane && !new_schema) {
 			tweakpane.destroy();
 			tweakpane = null;
-		} else if (!tweakpane) {
+		} else if (!tweakpane && new_schema) {
 			tweakpane = create_tweakpane(new_schema, (new_inputs) => {
 				update_inputs(new_inputs);
 			});
