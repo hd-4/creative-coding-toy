@@ -2,14 +2,17 @@ import * as THREE from "three";
 
 export interface CanvasProjectModule {
 	config: CanvasConfig;
-
-	default: (props: {
-		context: CanvasRenderingContext2D;
-		width: number;
-		height: number;
-		inputs: unknown;
-	}) => void;
+	default: CanvasSetup;
 }
+
+type CanvasSetup = (props: {
+	context: CanvasRenderingContext2D;
+	width: number;
+	height: number;
+	inputs: unknown;
+}) => CanvasDraw;
+
+type CanvasDraw = (props: {}) => void;
 
 export interface CanvasConfig {
 	width: number;
