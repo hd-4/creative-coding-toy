@@ -9,6 +9,11 @@ test.describe("Canvas project", () => {
 		const events = project.waitForLifecycleLogs("setup", "draw");
 		await page.goto("/tree/canvas-basic");
 		await events;
+
+		const canvas = page.locator("canvas");
+		await expect(canvas).toBeVisible();
+		expect(await canvas.getAttribute("width")).toBe("600");
+		expect(await canvas.getAttribute("height")).toBe("400");
 	});
 
 	test("remounts on input change used in setup", async ({ page, project }) => {

@@ -18,8 +18,8 @@ export function mount(mod, element, options = {}) {
 
 	function setup() {
 		canvas = document.createElement("canvas");
-		canvas.width = mod.config.width;
-		canvas.height = mod.config.height;
+		canvas.width = mod.config.size[0];
+		canvas.height = mod.config.size[1];
 		element.appendChild(canvas);
 
 		const context_2d = canvas.getContext("2d");
@@ -30,8 +30,8 @@ export function mount(mod, element, options = {}) {
 		inputs.start_span("setup");
 		draw = mod.default({
 			context: context,
-			width: mod.config.width,
-			height: mod.config.height,
+			width: mod.config.size[0],
+			height: mod.config.size[1],
 			inputs: inputs.proxy
 		});
 		inputs.end_span();

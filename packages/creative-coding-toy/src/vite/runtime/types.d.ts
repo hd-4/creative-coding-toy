@@ -5,6 +5,10 @@ export interface CanvasProjectModule {
 	default: CanvasSetup;
 }
 
+export interface CanvasConfig {
+	size: [width: number, height: number];
+}
+
 type CanvasSetup = (props: {
 	context: CanvasRenderingContext2D;
 	width: number;
@@ -13,11 +17,6 @@ type CanvasSetup = (props: {
 }) => CanvasDraw;
 
 type CanvasDraw = (props: {}) => void;
-
-export interface CanvasConfig {
-	width: number;
-	height: number;
-}
 
 export interface ThreeJSProjectModule {
 	config: ThreeJSConfig;
