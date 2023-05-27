@@ -14,7 +14,9 @@ const host_browser_path = `${runtime_base}/host.js`;
 /** @returns {import("vite").Plugin[]} */
 export function creative_coding_toy() {
 	return [
-		...svelte(),
+		...svelte({
+			hot: false
+		}),
 		p5_transform({
 			include: "**/+project.js"
 		}),
@@ -142,7 +144,8 @@ function hmr() {
 
 		async transform(code, id) {
 			// Filter modules
-			if (!id.endsWith("+project.js")) return null;
+			if (!id.endsWith("+project.js") && !id.endsWith("+project.svelte"))
+				return null;
 
 			code = code.trimEnd();
 			code =
