@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"ignoreDeprecations": "5.0",
+
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"importsNotUsedAsValues": "error",
+		"isolatedModules": true,
+		"preserveValueImports": true,
+		"lib": ["esnext", "DOM", "DOM.Iterable"],
+		"moduleResolution": "node",
+		"module": "esnext",
+		"target": "esnext",
+		"noEmit": true,
+		"paths": {}
+	}
+}

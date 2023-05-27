@@ -9,6 +9,7 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
+		"@playwright/test": "1.33.0",
 		"@rollup/pluginutils": "^5.0.2",
 		"@sveltejs/vite-plugin-svelte": "^2.0.4",
 		"@types/connect": "^3.4.35",

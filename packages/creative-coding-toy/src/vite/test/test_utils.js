@@ -1,4 +1,4 @@
-import { test as base } from "@playwright/test";
+import { devices, test as base } from "@playwright/test";
 
 export const test = base.extend({
 	project: async ({ page }, use) => {
@@ -51,3 +51,39 @@ export const test = base.extend({
 		});
 	}
 });
+
+export const config = {
+	testDir: "./test",
+
+	fullyParallel: true,
+	forbidOnly: !!process.env.CI,
+	retries: process.env.CI ? 2 : 0,
+	workers: process.env.CI ? 1 : undefined,
+
+	use: {
+		trace: "on-first-retry"
+	},
+
+	projects: [
+		{
+			name: "chromium",
+			use: { ...devices["Desktop Chrome"] }
+		},
+
+		{
+			name: "firefox",
+			use: { ...devices["Desktop Firefox"] }
+		},
+
+		{
+			name: "webkit",
+			use: { ...devices["Desktop Safari"] }
+		}
+	],
+
+	webServer: {
+		command: "pnpm dev",
+		port: 5173,
+		reuseExistingServer: !process.env.CI
+	}
+};

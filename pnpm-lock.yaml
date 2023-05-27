@@ -90,11 +90,14 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(@types/node@18.15.10)
 
-  packages/sandbox:
+  packages/creative-coding-toy/src/vite/test/writes:
     devDependencies:
+      '@playwright/test':
+        specifier: 1.33.0
+        version: 1.33.0
       creative-coding-toy:
         specifier: workspace:^
-        version: link:../creative-coding-toy
+        version: link:../../../..
       p5:
         specifier: 1.6.0
         version: 1.6.0
