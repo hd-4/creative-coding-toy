@@ -1,7 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { test } from "uvu";
-import * as assert from "uvu/assert";
+import { expect, test } from "vitest";
 import { generate_manifest } from "./index.js";
 
 const cwd = fileURLToPath(new URL(".", import.meta.url));
@@ -10,7 +9,7 @@ test("fixture: basic", () => {
 	const directory = fixture_path("basic");
 	const { projects, collections } = generate_manifest(directory);
 
-	assert.equal(projects.map(simplify_project), [
+	expect(projects.map(simplify_project)).toEqual([
 		{
 			id: "project"
 		},
@@ -28,7 +27,7 @@ test("fixture: basic", () => {
 		}
 	]);
 
-	assert.equal(collections.map(simplify_collection), [
+	expect(collections.map(simplify_collection)).toEqual([
 		{
 			id: "collection",
 			projects: [3]
@@ -40,7 +39,7 @@ test("fixture: nested-projects", () => {
 	const directory = fixture_path("nested-projects");
 	const { projects, collections } = generate_manifest(directory);
 
-	assert.equal(projects.map(simplify_project), [
+	expect(projects.map(simplify_project)).toEqual([
 		{
 			id: "root1",
 			children: [1, 2]
@@ -63,14 +62,14 @@ test("fixture: nested-projects", () => {
 		}
 	]);
 
-	assert.equal(collections.map(simplify_collection), []);
+	expect(collections.map(simplify_collection)).toEqual([]);
 });
 
 test("fixture: nested-collections", () => {
 	const directory = fixture_path("nested-collections");
 	const { projects, collections } = generate_manifest(directory);
 
-	assert.equal(projects.map(simplify_project), [
+	expect(projects.map(simplify_project)).toEqual([
 		{
 			id: "a/p1",
 			collection: 0
@@ -81,7 +80,7 @@ test("fixture: nested-collections", () => {
 		}
 	]);
 
-	assert.equal(collections.map(simplify_collection), [
+	expect(collections.map(simplify_collection)).toEqual([
 		{
 			id: "a",
 			projects: [0]
@@ -97,14 +96,14 @@ test("fixture: nested-collections-empty", () => {
 	const directory = fixture_path("nested-collections-empty");
 	const { projects, collections } = generate_manifest(directory);
 
-	assert.equal(projects.map(simplify_project), [
+	expect(projects.map(simplify_project)).toEqual([
 		{
 			id: "a/b/p1",
 			collection: 0
 		}
 	]);
 
-	assert.equal(collections.map(simplify_collection), [
+	expect(collections.map(simplify_collection)).toEqual([
 		{
 			id: "a/b",
 			projects: [0]
@@ -116,62 +115,54 @@ test("non-existent directory", () => {
 	const { projects, collections } = generate_manifest(
 		path.join(cwd, "nonexistent")
 	);
-	assert.equal(projects, []);
-	assert.equal(collections, []);
+	expect(projects).toEqual([]);
+	expect(collections).toEqual([]);
 });
 
 test("fixture: names", () => {
 	const directory = fixture_path("names");
 	const { projects, collections } = generate_manifest(directory);
 
-	assert.equal(
-		projects.map((p) => p.name),
-		[
-			"Camel Case",
-			"iNTENTIONAL Caps",
-			"Kebab Case",
-			"Mixed Separators Dash-Underscore",
-			"Numbered 1",
-			"Pascal Case",
-			"Pascal Case with ACRONYM",
-			"Snake Case",
-			"Snake Case WithCamel",
-			"Snake with 1numbers",
-			"Snake with Numbers 1",
-			"Space Separated",
-			"Tagged (ACRONYM)",
-			"Tagged (brackets)",
-			"Tagged (category)",
-			"Tagged (long category)",
-			"Tagged (pascal case)",
-			"Tagged (with parens)",
-			"Tagged Badly",
-			"Tagged Badly 2.",
-			"Tagged but (ambiguous)",
-			"Nested Project"
-		]
-	);
+	expect(projects.map((p) => p.name)).toEqual([
+		"Camel Case",
+		"iNTENTIONAL Caps",
+		"Kebab Case",
+		"Mixed Separators Dash-Underscore",
+		"Numbered 1",
+		"Pascal Case",
+		"Pascal Case with ACRONYM",
+		"Snake Case",
+		"Snake Case WithCamel",
+		"Snake with 1numbers",
+		"Snake with Numbers 1",
+		"Space Separated",
+		"Tagged (ACRONYM)",
+		"Tagged (brackets)",
+		"Tagged (category)",
+		"Tagged (long category)",
+		"Tagged (pascal case)",
+		"Tagged (with parens)",
+		"Tagged Badly",
+		"Tagged Badly 2.",
+		"Tagged but (ambiguous)",
+		"Nested Project"
+	]);
 
-	assert.equal(
-		collections.map((c) => c.name),
-		["Camel Case Collection"]
-	);
+	expect(collections.map((c) => c.name)).toEqual(["Camel Case Collection"]);
 });
 
 test("fixture: svelte", () => {
 	const directory = fixture_path("svelte");
 	const { projects, collections } = generate_manifest(directory);
 
-	assert.equal(projects.map(simplify_project), [
+	expect(projects.map(simplify_project)).toEqual([
 		{
 			id: "project"
 		}
 	]);
 
-	assert.equal(collections.map(simplify_collection), []);
+	expect(collections.map(simplify_collection)).toEqual([]);
 });
-
-test.run();
 
 /**
  * @param {string} fixture_name

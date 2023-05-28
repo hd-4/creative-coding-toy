@@ -1,40 +1,20 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { suite } from "uvu";
-import * as assert from "uvu/assert";
+import { expect, test, beforeEach, afterEach } from "vitest";
 import { createServer } from "vite";
 import { p5_transform } from "./index.js";
 
 const cwd = fileURLToPath(new URL(".", import.meta.url));
-
-/**
- * @type {import("uvu").Test<{
- * 	root: string;
- * 	start_vite(
- * 		fixture: string,
- * 		include: import("@rollup/pluginutils").FilterPattern
- * 	): Promise<void>;
- * 	test_transform(
- * 		input_file: string,
- * 		output_file: string
- * 	): Promise<void>;
- * 	vite: import("vite").ViteDevServer;
- * }>}
- */
-const test = suite();
 
 test("fixture: basic", async (context) => {
 	await context.start_vite("basic", "**/input.js");
 	await context.test_transform("input.js", "expected.js");
 
 	const id = (await context.vite.pluginContainer.resolveId("/input.js"))?.id;
-	assert.ok(id);
+	expect(id).toBeTruthy();
 	const info = context.vite.pluginContainer.getModuleInfo(id);
-	assert.ok(
-		info?.meta?.transformed_from_p5,
-		"meta.transformed_from_p5 is not set"
-	);
+	expect(info?.meta?.transformed_from_p5).toEqual(true);
 });
 
 test("fixture: deduped-names", async (context) => {
@@ -52,12 +32,9 @@ test("fixture: empty", async (context) => {
 	await context.test_transform("input.js", "expected.js");
 
 	const id = (await context.vite.pluginContainer.resolveId("/input.js"))?.id;
-	assert.ok(id);
+	expect(id).toBeTruthy();
 	const info = context.vite.pluginContainer.getModuleInfo(id);
-	assert.not.ok(
-		info?.meta?.transformed_from_p5,
-		"meta.transformed_from_p5 is set"
-	);
+	expect(info?.meta?.transformed_from_p5).toBeFalsy();
 });
 
 test("fixture: project-filename", async (context) => {
@@ -65,7 +42,7 @@ test("fixture: project-filename", async (context) => {
 	await context.test_transform("+project.js", "expected.js");
 });
 
-test.before.each((context) => {
+beforeEach((context) => {
 	context.start_vite = async (fixture, include) => {
 		context.root = fixture_path(fixture);
 		context.vite = await create_vite(context.root, include);
@@ -79,15 +56,13 @@ test.before.each((context) => {
 		if (process.env.UPDATE_FIXTURES) {
 			writeFileSync(expected_path, actual, "utf8");
 		}
-		assert.fixture(actual, readFileSync(expected_path, "utf8"));
+		expect(actual).toEqual(readFileSync(expected_path, "utf8"));
 	};
 });
 
-test.after.each(async (context) => {
+afterEach(async (context) => {
 	await context.vite.close();
 });
-
-test.run();
 
 /**
  * @param {string} root

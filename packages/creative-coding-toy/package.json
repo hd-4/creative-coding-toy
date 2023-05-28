@@ -5,9 +5,10 @@
 	"type": "module",
 	"scripts": {
 		"check": "tsc",
-		"test": "uvu src \"(spec\\.js|test[\\\\/]index\\.js)\""
+		"test": "pnpm test:js && pnpm test:browser",
+		"test:js": "vitest run",
+		"test:browser": "pnpm -r --workspace-concurrency 1 --filter=\"./src/vite/test/**\" test"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@playwright/test": "1.33.0",
 		"@rollup/pluginutils": "^5.0.2",
@@ -17,12 +18,12 @@
 		"@types/three": "^0.150.1",
 		"estree-walker": "^3.0.3",
 		"magic-string": "^0.30.0",
-		"ui": "workspace:^",
-		"uvu": "^0.5.6",
-		"vite": "^4.2.1",
 		"svelte": "^3.58.0",
 		"three": "^0.151.3",
-		"typescript": "^5.0.4"
+		"typescript": "^5.0.4",
+		"ui": "workspace:^",
+		"vite": "^4.2.1",
+		"vitest": "^0.31.1"
 	},
 	"peerDependencies": {
 		"p5": "^1.6.0",
