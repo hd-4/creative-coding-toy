@@ -62,12 +62,12 @@ importers:
       ui:
         specifier: workspace:^
         version: link:../ui
-      uvu:
-        specifier: ^0.5.6
-        version: 0.5.6
       vite:
         specifier: ^4.2.1
         version: 4.2.1(@types/node@18.15.10)
+      vitest:
+        specifier: ^0.31.1
+        version: 0.31.1
 
   packages/creative-coding-toy/src/vite/test/basics:
     devDependencies:

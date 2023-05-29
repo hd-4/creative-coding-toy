@@ -26,4 +26,16 @@ test.describe("Index page", () => {
 			.getByRole("listitem");
 		expect(await active_projects.count()).toBeGreaterThanOrEqual(1);
 	});
+
+	test("has collections", async ({ page }) => {
+		await page.goto("/");
+		const collections = page
+			.getByRole("list")
+			.nth(1)
+			.getByRole("listitem")
+			.filter({ has: page.getByRole("list") });
+		const collection_links = collections.getByRole("listitem");
+		expect(await collections.count()).toBeGreaterThanOrEqual(1);
+		expect(await collection_links.count()).toBeGreaterThanOrEqual(1);
+	});
 });
