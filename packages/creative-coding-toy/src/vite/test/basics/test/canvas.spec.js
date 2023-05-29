@@ -68,4 +68,15 @@ test.describe("Canvas project", () => {
 		const race = Promise.race([next_event, safe_wait_time]);
 		expect(await race).toBeUndefined();
 	});
+
+	test("calls onDestroy hook", async ({ page, project }) => {
+		await page.goto("/");
+		const draw_event = project.waitForLifecycleLog("draw");
+		await page.getByRole("link", { name: "Canvas Destroy" }).click();
+		await draw_event;
+
+		const next_event = project.waitForLifecycleLog();
+		await page.goBack();
+		expect(await next_event).toBe("destroy");
+	});
 });

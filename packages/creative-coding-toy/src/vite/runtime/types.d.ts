@@ -14,6 +14,7 @@ type CanvasSetup = (props: {
 	width: number;
 	height: number;
 	inputs: unknown;
+	onDestroy: (callback: () => void) => void;
 }) => CanvasDraw;
 
 type CanvasDraw = (props: {}) => void;

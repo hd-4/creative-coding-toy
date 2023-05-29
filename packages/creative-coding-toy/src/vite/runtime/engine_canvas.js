@@ -15,6 +15,8 @@ export function mount(mod, element, options = {}) {
 	let context;
 	/** @type {import("./types").CanvasDraw} */
 	let draw;
+	/** @type {() => void} */
+	let destroy_callback;
 
 	function setup() {
 		canvas = document.createElement("canvas");
@@ -32,7 +34,10 @@ export function mount(mod, element, options = {}) {
 			context: context,
 			width: mod.config.size[0],
 			height: mod.config.size[1],
-			inputs: inputs.proxy
+			inputs: inputs.proxy,
+			onDestroy(callback) {
+				destroy_callback = callback;
+			}
 		});
 		inputs.end_span();
 
@@ -46,6 +51,7 @@ export function mount(mod, element, options = {}) {
 	}
 
 	function remove() {
+		if (destroy_callback) destroy_callback();
 		element.removeChild(canvas);
 	}
 
