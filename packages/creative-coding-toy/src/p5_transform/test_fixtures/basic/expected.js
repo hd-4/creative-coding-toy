@@ -41,6 +41,12 @@ function draw() {
 	let z = window["abc" + sketch.d];
 	// sketch scope is applied to xyz
 	const obj = { xyz: sketch.xyz };
+
+	// sketch scope is not applied
+	labeled: for (let i = 0; i < 10; i++) {
+		break labeled;
+		continue labeled;
+	}
 }
 
 function mouseClicked() {

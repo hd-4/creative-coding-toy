@@ -203,6 +203,15 @@ function is_reference(node, parent) {
 	// disregard the `foo` in `foo = 100`
 	if (parent.type === "AssignmentExpression") return false;
 
+	// disregard the `foo` in `foo: for (let bar = 0; bar < 10; bar++) {}`
+	if (parent.type === "LabeledStatement") return false;
+
+	// disregard the `foo` in `break foo`
+	if (parent.type === "BreakStatement") return false;
+
+	// disregard the `foo` in `continue foo`
+	if (parent.type === "ContinueStatement") return false;
+
 	return true;
 }
 
