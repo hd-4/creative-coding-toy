@@ -90,4 +90,20 @@ test.describe("P5 project", () => {
 		const race = Promise.race([next_event, safe_wait_time]);
 		expect(await race).toBeUndefined();
 	});
+
+	test("only renders once when navigated to from index", async ({
+		page,
+		project
+	}) => {
+		await page.goto("/");
+
+		const events = project.waitForLifecycleLogs("preload", "setup", "draw");
+		await page.getByRole("link", { name: "P 5 Basic" }).click();
+		await events;
+
+		const next_event = project.waitForLifecycleLog();
+		const safe_wait_time = new Promise((resolve) => setTimeout(resolve, 250));
+		const race = Promise.race([next_event, safe_wait_time]);
+		expect(await race).toBeUndefined();
+	});
 });
