@@ -12,8 +12,8 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-node": "^1.2.3",
-		"@sveltejs/kit": "^1.15.0",
+		"@sveltejs/adapter-node": "^1.3.1",
+		"@sveltejs/kit": "^1.22.3",
 		"@tweakpane/core": "^1.1.6",
 		"@types/polka": "^0.5.4",
 		"eslint": "^8.37.0",
