@@ -47,6 +47,11 @@ function draw() {
 		break labeled;
 		continue labeled;
 	}
+
+	// sketch scope is applied outside of loop
+	const points = [];
+	for (let point of points) {}
+	sketch.point(0, 0);
 }
 
 function mouseClicked() {

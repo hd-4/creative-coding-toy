@@ -163,6 +163,18 @@ function analysis(code, ast) {
 					this.skip();
 				}
 			}
+		},
+
+		/**
+		 * @param {import('./types.js').AstNode} node
+		 */
+		leave(node) {
+			if (node.scope) {
+				current_scope =
+					/** @type {import("@rollup/pluginutils").AttachedScope} */ (
+						current_scope.parent
+					);
+			}
 		}
 	});
 
