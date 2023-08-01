@@ -56,3 +56,8 @@ function mouseClicked() {
 	// sketch scope is not applied
 	console.log("Clicked!");
 }
+
+class Particle {
+	position;
+	velocity = 1.0;
+}

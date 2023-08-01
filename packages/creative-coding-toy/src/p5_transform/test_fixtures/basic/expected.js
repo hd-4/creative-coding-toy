@@ -59,12 +59,18 @@ function mouseClicked() {
 	console.log("Clicked!");
 }
 
+class Particle {
+	position;
+	velocity = 1.0;
+}
+
 export default function (sketch$1) {
 	sketch$1.img ??= img;
 	sketch$1.preload ??= preload;
 	sketch$1.setup ??= setup;
 	sketch$1.draw ??= draw;
 	sketch$1.mouseClicked ??= mouseClicked;
+	sketch$1.Particle ??= Particle;
 	sketch = sketch$1;
 };
 
@@ -73,5 +79,6 @@ export {
 	preload,
 	setup,
 	draw,
-	mouseClicked
+	mouseClicked,
+	Particle
 };

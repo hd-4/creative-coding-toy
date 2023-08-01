@@ -205,6 +205,9 @@ function is_reference(node, parent) {
 	// disregard the `bar` in `class Foo { bar () {...} }`
 	if (parent.type === "MethodDefinition") return false;
 
+	// disregard `bar` in `class Foo { bar; }`
+	if (parent.type === "PropertyDefinition") return false;
+
 	// disregard the `bar` in `export { foo as bar }`
 	if (parent.type === "ExportSpecifier" && node !== parent.local) return false;
 
