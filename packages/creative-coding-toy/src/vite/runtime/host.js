@@ -44,7 +44,14 @@ export async function load_project(path) {
 	registration_callback = (id) => {
 		loaded_id = id;
 	};
-	const mod = await import(/* @vite-ignore */ path);
+
+	let mod;
+	try {
+		mod = await import(/* @vite-ignore */ path);
+	} catch {
+		mod = null;
+	}
+
 	if (!loaded_id) return mod;
 	project_paths_by_id.set(loaded_id, path);
 	loaded_projects.set(path, mod);
@@ -87,6 +94,8 @@ export function update_project(id, mod) {
  * @param {{ engine?: string; }} project_module
  */
 export async function get_engine(traits, project_module) {
+	if (!project_module) return { name: "none", mod: null };
+
 	const engine_name = traits.transformed_from_p5
 		? "p5"
 		: traits.filetype === "svelte"
@@ -97,8 +106,9 @@ export async function get_engine(traits, project_module) {
 			name: engine_name,
 			mod: await import(`./engine_${engine_name}.js`)
 		};
-	} catch {}
-	return { name: engine_name, mod: null };
+	} catch {
+		return { name: engine_name, mod: null };
+	}
 }
 
 /**

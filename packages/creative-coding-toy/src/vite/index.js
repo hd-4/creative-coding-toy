@@ -75,7 +75,12 @@ function main() {
 						parent: p.parent,
 						children: p.children,
 						async preload() {
-							await server.transformRequest(this.import_path);
+							try {
+								await server.transformRequest(this.import_path);
+							} catch {
+								return {};
+							}
+
 							const id = (
 								await server.pluginContainer.resolveId(this.import_path)
 							)?.id;

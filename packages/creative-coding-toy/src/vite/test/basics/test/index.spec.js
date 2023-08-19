@@ -38,4 +38,10 @@ test.describe("Index page", () => {
 		expect(await collections.count()).toBeGreaterThanOrEqual(1);
 		expect(await collection_links.count()).toBeGreaterThanOrEqual(1);
 	});
+
+	test("handles invalid files", async ({ page }) => {
+		await page.goto("/tree/syntax-error");
+
+		expect(await page.getByText("500").isVisible()).toBeFalsy();
+	});
 });
