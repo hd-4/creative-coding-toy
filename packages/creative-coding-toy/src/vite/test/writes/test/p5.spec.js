@@ -62,4 +62,59 @@ test.describe("P5 project", () => {
 			fs.writeFileSync(project_file, original_contents);
 		}
 	});
+
+	test("hmr after an exception", async ({ page, project }) => {
+		const draw_event = project.waitForLifecycleLog("draw");
+		await page.goto("/tree/p5-hmr-after-exception");
+		await draw_event;
+
+		const project_dir = fileURLToPath(
+			new URL("../projects/p5-hmr-after-exception", import.meta.url)
+		);
+		const project_file = path.join(project_dir, "+project.js");
+		const original_contents = fs.readFileSync(project_file);
+		const changed_contents = fs.readFileSync(
+			path.join(project_dir, "changed.js")
+		);
+
+		const draw_event2 = project.waitForLifecycleLog("draw");
+		fs.writeFileSync(project_file, changed_contents);
+		try {
+			await draw_event2;
+			expect(await page.locator("canvas").count()).toBe(1);
+		} finally {
+			fs.writeFileSync(project_file, original_contents);
+		}
+	});
+
+	test("hmr after an exception with hmr first", async ({ page, project }) => {
+		const draw_event = project.waitForLifecycleLog("draw");
+		await page.goto("/tree/p5-hmr-after-exception2");
+		await draw_event;
+
+		const project_dir = fileURLToPath(
+			new URL("../projects/p5-hmr-after-exception2", import.meta.url)
+		);
+		const project_file = path.join(project_dir, "+project.js");
+		const original_contents = fs.readFileSync(project_file);
+		const changed_contents = fs.readFileSync(
+			path.join(project_dir, "changed.js")
+		);
+
+		// Trigger a successful HMR
+		const draw_event2 = project.waitForLifecycleLog("draw");
+		fs.writeFileSync(project_file, original_contents);
+		await draw_event2;
+
+		// Trigger HMR to a version that throws an exception
+		const draw_event3 = project.waitForLifecycleLog("draw");
+		fs.writeFileSync(project_file, changed_contents);
+		await draw_event3;
+
+		// Trigger HMR to the good version
+		const next_event = project.waitForLifecycleLog();
+		fs.writeFileSync(project_file, original_contents);
+		expect(await next_event).toBe("setup");
+		expect(await page.locator("canvas").count()).toBe(1);
+	});
 });
