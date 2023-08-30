@@ -19,15 +19,20 @@ export function mount(mod, element, options = {}) {
 	let destroy_callback;
 
 	function setup() {
+		const pixelRatio = window.devicePixelRatio;
+
 		canvas = document.createElement("canvas");
-		canvas.width = mod.config.size[0];
-		canvas.height = mod.config.size[1];
+		canvas.width = mod.config.size[0] * pixelRatio;
+		canvas.height = mod.config.size[1] * pixelRatio;
+		canvas.style.width = `${mod.config.size[0]}px`;
+		canvas.style.height = `${mod.config.size[1]}px`;
 		element.appendChild(canvas);
 
 		const context_2d = canvas.getContext("2d");
 		if (!context_2d)
 			throw new Error("The canvas returned an undefined context.");
 		context = context_2d;
+		context.scale(pixelRatio, pixelRatio);
 
 		inputs.start_span("setup");
 		draw = mod.default({

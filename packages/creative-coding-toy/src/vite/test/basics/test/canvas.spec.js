@@ -9,8 +9,21 @@ test.describe("Canvas project", () => {
 
 		const canvas = page.locator("canvas");
 		await expect(canvas).toBeVisible();
-		expect(await canvas.getAttribute("width")).toBe("600");
-		expect(await canvas.getAttribute("height")).toBe("400");
+
+		// The dimensions of the canvas should take into account the pixel ratio
+		const dpr = await page.evaluate(() => window.devicePixelRatio);
+		expect(await canvas.getAttribute("width")).toBe(String(600 * dpr));
+		expect(await canvas.getAttribute("height")).toBe(String(400 * dpr));
+		expect(await canvas.evaluate((c) => c.style.width)).toBe("600px");
+		expect(await canvas.evaluate((c) => c.style.height)).toBe("400px");
+		expect(
+			await canvas.evaluate((/** @type {HTMLCanvasElement} */ c) => {
+				const context = c.getContext("2d");
+				const matrix = context.getTransform();
+				const point = matrix.transformPoint(new DOMPoint(600, 400));
+				return { x: point.x, y: point.y };
+			})
+		).toStrictEqual({ x: 600 * dpr, y: 400 * dpr });
 	});
 
 	test("remounts on input change used in setup", async ({ page, project }) => {

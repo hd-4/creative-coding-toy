@@ -67,12 +67,12 @@ export const config = {
 	projects: [
 		{
 			name: "chromium",
-			use: { ...devices["Desktop Chrome"] }
+			use: { ...devices["Desktop Chrome HiDPI"] }
 		},
 
 		{
 			name: "firefox",
-			use: { ...devices["Desktop Firefox"] }
+			use: { ...devices["Desktop Firefox HiDPI"] }
 		},
 
 		{
