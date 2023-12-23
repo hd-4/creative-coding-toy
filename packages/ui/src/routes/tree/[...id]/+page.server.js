@@ -2,11 +2,11 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, platform }) {
-	if (!platform) throw error(503);
+	if (!platform) error(503);
 
 	const { projects, collections } = platform.req.cctoy_meta.manifest;
 	const project = projects.find((p) => p.id === params.id);
-	if (!project) throw error(404, 'Project not found');
+	if (!project) error(404, 'Project not found');
 
 	const collection = project.collection !== null ? collections[project.collection] : null;
 	const parent = project.parent !== null ? projects[project.parent] : null;

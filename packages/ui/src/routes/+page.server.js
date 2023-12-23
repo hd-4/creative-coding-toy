@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import("./$types").PageServerLoad} */
 export function load({ platform }) {
-	if (!platform) throw error(503);
+	if (!platform) error(503);
 
 	const { projects, collections } = platform.req.cctoy_meta.manifest;
 
