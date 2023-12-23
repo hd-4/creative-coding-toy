@@ -19,7 +19,7 @@
 		"@types/polka": "^0.5.4",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^8.8.0",
-		"eslint-plugin-svelte3": "^4.0.0",
+		"eslint-plugin-svelte": "^2.35.1",
 		"open-props": "^1.5.7",
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",

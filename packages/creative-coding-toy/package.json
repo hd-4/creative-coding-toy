@@ -11,19 +11,19 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "1.33.0",
-		"@rollup/pluginutils": "^5.0.2",
-		"@sveltejs/vite-plugin-svelte": "^2.0.4",
+		"@rollup/pluginutils": "^5.1.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"@types/connect": "^3.4.35",
-		"@types/node": "^18.15.10",
+		"@types/node": "^18.19.3",
 		"@types/three": "^0.150.1",
 		"estree-walker": "^3.0.3",
 		"magic-string": "^0.30.0",
-		"svelte": "^3.58.0",
+		"svelte": "^4.2.8",
 		"three": "^0.151.3",
 		"typescript": "^5.0.4",
 		"ui": "workspace:^",
-		"vite": "^4.2.1",
-		"vitest": "^0.31.1"
+		"vite": "^5.0.10",
+		"vitest": "^1.1.0"
 	},
 	"peerDependencies": {
 		"p5": "^1.6.0",
