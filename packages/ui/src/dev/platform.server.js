@@ -3,7 +3,7 @@ const platform = {
 		cctoy_meta: {
 			/** @type {import("ui").ServerManifest} */
 			manifest: {
-				start_url: '/src/dev/host.js',
+				start_url: '/src/dev/runtime.js',
 
 				projects: [
 					{
