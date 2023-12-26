@@ -98,8 +98,8 @@ export class Host {
 		const engine_name = traits.transformed_from_p5
 			? "p5"
 			: traits.filetype === "svelte"
-			? "svelte"
-			: project_module.engine;
+				? "svelte"
+				: project_module.engine;
 		try {
 			return {
 				name: engine_name,
