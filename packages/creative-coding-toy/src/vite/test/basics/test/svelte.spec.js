@@ -4,7 +4,7 @@ import { test } from "../../test_utils.js";
 test.describe("Svelte project", () => {
 	test("renders", async ({ page }) => {
 		await page.goto("/tree/svelte-basic");
-		const output_element = page.getByTestId("output");
+		const output_element = page.getByTestId("output_a");
 		await expect(output_element).toBeVisible();
 	});
 
@@ -12,13 +12,21 @@ test.describe("Svelte project", () => {
 		await page.goto("/tree/svelte-basic");
 
 		// await page.getByLabel("value_a").fill("bar");
-		const input = page
+		let input = page
 			.locator("div")
 			.filter({ hasText: /^value_a$/ })
 			.getByRole("textbox");
-		await input.fill("bar");
+		await input.fill("abc");
 		await input.blur();
 
-		await expect(page.getByTestId("output")).toHaveText("bar");
+		input = page
+			.locator("div")
+			.filter({ hasText: /^value_b$/ })
+			.getByRole("textbox");
+		await input.fill("xyz");
+		await input.blur();
+
+		await expect(page.getByTestId("output_a")).toHaveText("abc");
+		await expect(page.getByTestId("output_b")).toHaveText("xyz");
 	});
 });
