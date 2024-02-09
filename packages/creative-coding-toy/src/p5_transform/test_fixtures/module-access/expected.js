@@ -1,4 +1,4 @@
-import p5 from '/resolved/path/to/p5.js';
+import p5 from "/resolved/path/to/p5.js";
 
 let sketch;
 
