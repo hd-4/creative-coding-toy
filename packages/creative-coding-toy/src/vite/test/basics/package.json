@@ -11,6 +11,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "1.33.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"creative-coding-toy": "workspace:^",
 		"p5": "1.6.0",
 		"svelte": "4.2.8",

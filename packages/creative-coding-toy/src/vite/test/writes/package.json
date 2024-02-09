@@ -10,6 +10,7 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"@playwright/test": "1.33.0",
 		"creative-coding-toy": "workspace:^",
 		"p5": "1.6.0",

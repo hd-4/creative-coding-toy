@@ -1,5 +1,4 @@
 import path from "node:path";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
 import * as vite from "vite";
 
 import { handler } from "ui";
@@ -14,9 +13,6 @@ const runtime_entry_browser_path = `${runtime_base}/index.js`;
 /** @returns {import("vite").Plugin[]} */
 export function creative_coding_toy() {
 	return [
-		...svelte({
-			hot: false
-		}),
 		p5_transform({
 			include: "**/+project.js"
 		}),
@@ -56,6 +52,13 @@ function main() {
 
 		configResolved(config) {
 			project_base = path.join(config.root, "projects");
+
+			const svelte = config.plugins.find(
+				(p) => p.name === "vite-plugin-svelte"
+			);
+			if (svelte?.api.options.hot) {
+				throw new Error("Please turn off Svelte HMR.");
+			}
 		},
 
 		configureServer(server) {
