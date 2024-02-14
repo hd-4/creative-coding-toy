@@ -81,16 +81,17 @@ function main() {
 							try {
 								await server.transformRequest(this.import_path);
 							} catch {
-								return {};
+								return { successful: false };
 							}
 
 							const id = (
 								await server.pluginContainer.resolveId(this.import_path)
 							)?.id;
-							if (!id) return {};
+							if (!id) return { successful: false };
 
 							const info = server.pluginContainer.getModuleInfo(id);
 							return {
+								successful: true,
 								transformed_from_p5: info?.meta?.transformed_from_p5
 							};
 						}

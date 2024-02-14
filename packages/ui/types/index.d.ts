@@ -18,7 +18,7 @@ export interface ProjectData {
 	parent: number | null;
 	children: number[];
 
-	preload(): Promise<PreloadAnalysis>;
+	preload(): Promise<PreloadResult>;
 }
 
 export interface CollectionData {
@@ -28,6 +28,7 @@ export interface CollectionData {
 	projects: number[];
 }
 
-export interface PreloadAnalysis {
+export interface PreloadResult {
+	successful: boolean;
 	transformed_from_p5?: boolean;
 }

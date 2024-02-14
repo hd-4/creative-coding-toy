@@ -13,7 +13,7 @@ export async function load({ params, platform }) {
 	const siblings = parent ? parent.children.map((i) => projects[i]) : null;
 	const children = project.children.map((i) => projects[i]);
 
-	const preload_analysis = await project.preload();
+	const preload_result = await project.preload();
 
 	return {
 		project_name: project.name,
@@ -22,11 +22,8 @@ export async function load({ params, platform }) {
 		siblings: siblings?.map((p) => ({ name: p.name, link: `/tree/${p.id}` })) ?? null,
 		children: children?.map((p) => ({ name: p.name, link: `/tree/${p.id}` })) ?? null,
 
-		traits: {
-			...preload_analysis,
-			filetype: project.filetype
-		},
-
+		preload_result,
+		filetype: project.filetype,
 		project_import_path: project.import_path
 	};
 }

@@ -33,6 +33,13 @@
 			inputs = tweakpane.params;
 		}
 
+		// Load the project module if it didn't preload. This should fail just like
+		// the preload did, but it'll throw an exception that the user can see.
+		const { host } = await import_runtime();
+		if (!data.preload_result.successful) {
+			await host.load_project(data.project_import_path);
+		}
+
 		// Mount
 		const engine = data.engine.mod;
 		const project_module = data.project_module;
@@ -41,7 +48,6 @@
 		});
 
 		// Set up HMR
-		const { host } = await import_runtime();
 		project_listener = host.add_project_listener(data.project_import_path, async () => {
 			await invalidateAll();
 			await reload_project();

@@ -1,6 +1,14 @@
 import { devices, test as base } from "@playwright/test";
 
 export const test = base.extend({
+	app: async ({ page }, use) => {
+		use({
+			async gotoIndex() {
+				await page.goto("/");
+			}
+		});
+	},
+
 	project: async ({ page }, use) => {
 		use({
 			/**

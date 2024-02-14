@@ -39,9 +39,14 @@ test.describe("Index page", () => {
 		expect(await collection_links.count()).toBeGreaterThanOrEqual(1);
 	});
 
-	test("handles invalid files", async ({ page }) => {
-		await page.goto("/tree/syntax-error");
+	test("shows syntax errors at the appropriate time", async ({ app, page }) => {
+		await app.gotoIndex();
+		const link = page.getByRole("link", { name: "Syntax Error" });
 
-		expect(await page.getByText("500").isVisible()).toBeFalsy();
+		await link.hover();
+		await expect(page.getByText(/fix the code to dismiss/)).toBeHidden();
+
+		await link.click();
+		await expect(page.getByText(/fix the code to dismiss/)).toBeVisible();
 	});
 });
